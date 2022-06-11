@@ -11,7 +11,7 @@
 .mainImage {
   margin-left: auto;
   margin-right: auto;
-  height: 420px;
+  max-height: 420px;
   justify-content: center;
   border: 2px solid #D3D6DA;
 }
@@ -42,6 +42,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 100%;
 }
 
 .enterButton {
@@ -70,4 +71,31 @@
 
 .unsolvedState {
   letter-spacing: 2px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+}
+
+@media (max-width: 420px) {
+  .main {
+    max-width: calc(100vw);
+  }
+
+  .mainImage {
+    width: 100vw;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  .inputSection {
+    flex-direction: column;
+  }
+
+  .inputBox {
+    width: calc(100vw - 20px);
+  }
+
+  .enterButton {
+    margin-top: 10px;
+  }
 }
