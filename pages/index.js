@@ -51,8 +51,8 @@ export default function Home(props) {
   const [guesses, setGuesses] = useState([]);
 
   function validateGuess(guess) {
-    var splitUnsolvedState = unsolvedState.split(" ");
-    var splitDescription = props.text_description.split(" ");
+    var splitUnsolvedState = unsolvedState.toString().toLowerCase().split(" ");
+    var splitDescription = props.text_description.toString().toLowerCase().split(" ");
 
     setGuesses(guesses => [...guesses,guess] );
     if (guess === props.text_description || splitDescription === splitUnsolvedState) {
@@ -93,7 +93,7 @@ export default function Home(props) {
             <input className={styles.inputBox} id="guess"></input>
             <div className={styles.enterButton} onClick={() => validateGuess(document.getElementById("guess").value)}>ENTER</div>
           </div>
-          {guesses.reverse().map((guess) => (<div>{guess}</div>))}
+          {guesses.reverse().map((guess, key) => (<div key={key}>{guess}</div>))}
         </div>
       </main>
     </div>
