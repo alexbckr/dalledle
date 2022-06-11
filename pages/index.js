@@ -55,7 +55,7 @@ export default function Home(props) {
     var splitDescription = props.text_description.toString().toLowerCase().split(" ");
 
     setGuesses(guesses => [...guesses,guess] );
-    if (guess === props.text_description || splitDescription === splitUnsolvedState) {
+    if (guess === props.text_description || unsolvedState.toString().toLowerCase() === props.text_description.toString().toLowerCase()) {
       setSolved(true);
       setUnsolvedState(props.text_description);
     }
