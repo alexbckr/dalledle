@@ -12,14 +12,12 @@ export default function DirectionsOverlay(props) {
                Guess the <b>PROMPT</b> that inspired the image.
             </p>
             <p>
-               After each guess, the color of the word in the table will display
-               whether the word is in the correct place in the sentence &aposgreen\),
-               the word is in the sentence but in the wrong place \(yellow\), or
-               not in the sentence \(grey\).
+               The color of the word in the table will indicate whether that word is in the correct place in the phrase (green),
+               the word is in the phrase but in the wrong place (yellow), or
+               not in the phrase (grey).
             </p>
             <p>
-               *note: Treat each image in a grid as an individual image. They
-               are not a sequence.
+               tip: Treat each image in a grid as an individual image. They aren't a sequence.
             </p>
 
             <div className={styles.playButton} onClick={() => props.dismiss()}>Let's play</div>

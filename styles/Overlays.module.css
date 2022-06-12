@@ -68,8 +68,8 @@
 
 .directionsContainer > p {
   text-align: left;
-  margin-top: 1em;
-  margin-bottom: 1em;
+  margin-top: .8em;
+  margin-bottom: .8em;
   font-size: 14px;
 }
 
@@ -81,6 +81,7 @@
   margin-left: auto;
   margin-right: auto;
   cursor: pointer;
+  margin-top: 10px;
 }
 
 .playButton:active {
@@ -88,8 +89,8 @@
 }
 
 @media (max-width: 550px) {
-    .container {
-        max-width: 90%;
+    .winContainer, .statsContainer, .directionsContainer {
+        max-width: 90vw;
     }
 }
 

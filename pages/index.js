@@ -55,10 +55,10 @@ export default function Home(props) {
    const [solved, setSolved] = useState(false)
    const [display, setDisplay] = useState(props.initialState)
    const [guesses, setGuesses] = useState([])
-   const [overlayVisible, setOverlayVisible] = useState(false)
+   const [overlayVisible, setOverlayVisible] = useState(true)
    const [winVisible, setWinVisible] = useState(false)
    const [statsVisible, setStatsVisible] = useState(false)
-   const [directionsVisible, setDirectionsVisible] = useState(false)
+   const [directionsVisible, setDirectionsVisible] = useState(true)
    const [loading, setLoading] = useState(false)
 
    function handleGuess(guess) {
