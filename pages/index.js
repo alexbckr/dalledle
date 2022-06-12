@@ -1,6 +1,7 @@
 import Head from "next/head"
 import styles from "../styles/Home.module.css"
 import Header from "../components/Header"
+import WinOverlay from "../components/WinOverlay"
 import { prisma } from "../lib/prisma.js"
 import { useState, useEffect } from "react"
 import parse from "html-react-parser"
@@ -52,11 +53,12 @@ export default function Home(props) {
    const [solved, setSolved] = useState(false)
    const [display, setDisplay] = useState(props.initialState)
    const [guesses, setGuesses] = useState([])
+   const [overlayVisible, setOverlayVisible] = useState(false)
    const [loading, setLoading] = useState(false)
 
    function handleGuess(guess) {
       for (var i = 0; i < guesses.length; i++) {
-        console.log("guesses[" + i + "]: " + guesses[i].text)
+         console.log("guesses[" + i + "]: " + guesses[i].text)
       }
       setLoading(true)
       // some random stuff you could catch
@@ -93,7 +95,7 @@ export default function Home(props) {
          if (locInDesc !== -1) {
             // console.log("this item is in the description")
             if (locInDesc === i) {
-              //  console.log("guess index is correct, too (i is " + i + ")")
+               //  console.log("guess index is correct, too (i is " + i + ")")
                currentGuessCombo.colors.push("#6aaa64")
             } else {
                currentGuessCombo.colors.push("#c9b458")
@@ -107,31 +109,40 @@ export default function Home(props) {
 
       var html = "<p>"
       for (var i = 0; i < currentGuessCombo.colors.length; i++) {
-          html += "<span style=\"color: " + currentGuessCombo.colors[i] + "\">" + splitGuess_noUpper[i] + "</span>"
-          if (i < currentGuessCombo.colors.length - 1) {
-              html += " "
-          }
+         html +=
+            '<span style="color: ' +
+            currentGuessCombo.colors[i] +
+            '">' +
+            splitGuess_noUpper[i] +
+            "</span>"
+         if (i < currentGuessCombo.colors.length - 1) {
+            html += " "
+         }
       }
       html += "</p>"
       currentGuessCombo.html = html
 
-
-      setGuesses(guesses => [...guesses, currentGuessCombo]);
+      setGuesses((guesses) => [...guesses, currentGuessCombo])
 
       // is this the right semantic similarity to compare to?
-      if (guess.toUpperCase() === props.text_description.toUpperCase() || semanticSimilarity > 0.98) {
-        setLoading(false)
-        setSolved(true)
-        handleSolve()
-        return
-     }
-     setLoading(false)
-     return
+      if (
+         guess.toUpperCase() === props.text_description.toUpperCase() ||
+         semanticSimilarity > 0.98
+      ) {
+         setLoading(false)
+         setSolved(true)
+         handleSolve()
+         return
+      }
+      setLoading(false)
+      return
    }
 
    function handleSolve() {
       console.log("puzzle solved")
       setDisplay(props.text_description)
+      setSolved(true)
+      setOverlayVisible(true)
    }
 
    // prereq: guess should be string
@@ -167,66 +178,89 @@ export default function Home(props) {
    }
 
    return (
-      <div className={styles.container}>
-         <Head>
-            <title>DALL-Edle</title>
-            <meta name="description" content="Inspired by DALL-E" />
-            <link rel="icon" href="/favicon.ico" />
-         </Head>
-
-         <Header />
-
-         <main className={styles.main} onKeyPress={(e) => e.key === 'Enter' && handleGuess(document.getElementById("guess").value)}>
-            <div className={styles.game}>
-               <img
-                  draggable="false"
-                  className={styles.mainImage}
-                  src={props.url}
-               ></img>
-               <div className={solved ? styles.displaySolved : styles.display}>{display}</div>
-               <div className={styles.inputSection}>
-                  <input className={styles.inputBox} id="guess"></input>
-                  <div
-                     className={styles.enterButton}
-                     onClick={() =>
-                        handleGuess(document.getElementById("guess").value)
-                     }
-                  >
-                     ENTER
-                  </div>
-               </div>
-               {guesses.length !== 0 && (
-                  <table className={styles.table}>
-                     <thead>
-                        <tr>
-                           <th className={styles.tableGuessNum}>#</th>
-                           <th className={styles.tableText}>Text</th>
-                           <th className={styles.tableSemanticSimilarity}>
-                              SS (?)
-                           </th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        {guesses.map((guess, key) => (
-                           <tr key={key}>
-                              <td className={styles.tableGuessNum}>
-                                 {guess.key}
-                              </td>
-                              <td className={styles.tableText}>
-                                  {parse(guess.html)}
-                              </td>
-                              <td
-                                 className={styles.tableSemanticSimilarityTable}
-                              >
-                                 {guess.semanticSimilarity}
-                              </td>
-                           </tr>
-                        )).reverse()}
-                     </tbody>
-                  </table>
-               )}
+      <>
+         {overlayVisible && (
+            <div className={styles.overlayContainer}>
+                {solved && (
+                  <WinOverlay guessNum={guesses.length} imageUrl={props.url}/>
+                )}
             </div>
-         </main>
-      </div>
+         )}
+         <div className={styles.container}>
+            <Head>
+               <title>DALL-Edle</title>
+               <meta name="description" content="Inspired by DALL-E" />
+               <link rel="icon" href="/favicon.ico" />
+            </Head>
+
+            <Header />
+
+            <main
+               className={styles.main}
+               onKeyPress={(e) =>
+                  e.key === "Enter" &&
+                  handleGuess(document.getElementById("guess").value)
+               }
+            >
+               <div className={styles.game}>
+                  <img
+                     draggable="false"
+                     className={styles.mainImage}
+                     src={props.url}
+                  ></img>
+                  <div
+                     className={solved ? styles.displaySolved : styles.display}
+                  >
+                     {display}
+                  </div>
+                  <div className={styles.inputSection}>
+                     <input className={styles.inputBox} id="guess"></input>
+                     <div
+                        className={styles.enterButton}
+                        onClick={() =>
+                           handleGuess(document.getElementById("guess").value)
+                        }
+                     >
+                        ENTER
+                     </div>
+                  </div>
+                  {guesses.length !== 0 && (
+                     <table className={styles.table}>
+                        <thead>
+                           <tr>
+                              <th className={styles.tableGuessNum}>#</th>
+                              <th className={styles.tableText}>Text</th>
+                              <th className={styles.tableSemanticSimilarity}>
+                                 SS (?)
+                              </th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {guesses
+                              .map((guess, key) => (
+                                 <tr key={key}>
+                                    <td className={styles.tableGuessNum}>
+                                       {guess.key}
+                                    </td>
+                                    <td className={styles.tableText}>
+                                       {parse(guess.html)}
+                                    </td>
+                                    <td
+                                       className={
+                                          styles.tableSemanticSimilarityTable
+                                       }
+                                    >
+                                       {guess.semanticSimilarity}
+                                    </td>
+                                 </tr>
+                              ))
+                              .reverse()}
+                        </tbody>
+                     </table>
+                  )}
+               </div>
+            </main>
+         </div>
+      </>
    )
 }
