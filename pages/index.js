@@ -78,79 +78,12 @@ export default function Home(props) {
 
       document.getElementById("guess").value = ""
 
-      var semanticSimilarity = "0"
-      // here's a bit
       if (guess.toString().trim() !== "" && guess.split(" ").length > 2) {
          // run semantic sim function (coming soon ig)
-         semanticSimilarity = ":("
+         getSemanticSimilarity_testing(guess.toString().trim())
       } else {
-         semanticSimilarity = ":("
+         getSemanticSimilarity_testing(":(")
       }
-
-      console.log("semantic sim is " + semanticSimilarity)
-
-      let currentGuessCombo = {
-         key: guesses.length + 1,
-         text: guess,
-         semanticSimilarity: semanticSimilarity,
-         colors: [],
-      }
-
-      var splitGuess_noUpper = guess.split(" ")
-      var splitGuess = guess.toUpperCase().split(" ")
-      // console.log("splitGuess: " + splitGuess)
-      // console.log("props.split_description: " + props.split_description)
-
-      for (var i = 0; i < splitGuess.length; i++) {
-         const relevantWord = splitGuess[i]
-         console.log("relevantWord: " + relevantWord)
-         const locInDesc = props.split_description.indexOf(relevantWord)
-         console.log("locInDesc: " + locInDesc)
-
-         if (locInDesc !== -1) {
-            // console.log("this item is in the description")
-            if (locInDesc === i) {
-               //  console.log("guess index is correct, too (i is " + i + ")")
-               currentGuessCombo.colors.push("#6aaa64")
-            } else {
-               currentGuessCombo.colors.push("#c9b458")
-            }
-         } else {
-            currentGuessCombo.colors.push("#787c7e")
-         }
-      }
-
-      // console.log("colors: " + currentGuessCombo.colors)
-
-      var html = "<p>"
-      for (var i = 0; i < currentGuessCombo.colors.length; i++) {
-         html +=
-            '<span style="color: ' +
-            currentGuessCombo.colors[i] +
-            '">' +
-            splitGuess_noUpper[i] +
-            "</span>"
-         if (i < currentGuessCombo.colors.length - 1) {
-            html += " "
-         }
-      }
-      html += "</p>"
-      currentGuessCombo.html = html
-
-      setGuesses((guesses) => [...guesses, currentGuessCombo])
-
-      // is this the right semantic similarity to compare to?
-      if (
-         guess.toUpperCase() === props.text_description.toUpperCase() ||
-         (!isNaN(semanticSimilarity) && Number(semanticSimilarity) > 0.98)
-      ) {
-         setLoading(false)
-         setSolved(true)
-         handleSolve()
-         return
-      }
-      setLoading(false)
-      return
    }
 
    function handleSolve() {
@@ -214,8 +147,11 @@ export default function Home(props) {
    //prereq: guess should string
    function getSemanticSimilarity_testing(guess) {
 
-      if (guess === null || guess.toString().trim() === "") {
-         return -1
+      // I didn't enter my cc for this token, so I'm fine with exposing it? is that ok?
+      var token = "1202e2ee98174fba9b340300b3855bc2"
+
+      if (guess == ":(" || guess === null || guess.toString().trim() === "") {
+         return completeGuessProcessing(":(", guess)
       }
 
       const text1 = encodeURIComponent(guess.trim())
@@ -231,12 +167,86 @@ export default function Home(props) {
             text1 +
             " &text2=" +
             text2 +
-            "&lang=en&token=" + process.env.DANDELION_TOKEN,
+            "&lang=en&token=" + token,
          requestOptions
       )
          .then((response) => response.text())
-         .then((result) => {return result.similarity })
-         .catch((error) => console.log("error", error))
+         .then((result) => {
+            console.log("result: ", result)
+            var parsed = JSON.parse(result)
+            completeGuessProcessing(parsed.similarity, guess)
+         })
+         .catch((error) => {
+            console.log("error in SS", error)
+            completeGuessProcessing(":(", guess)
+         })
+   }
+
+   function completeGuessProcessing(ss, guess) {
+      console.log("semantic similarity: " + ss)
+
+      let currentGuessCombo = {
+            key: guesses.length + 1,
+            text: guess,
+            semanticSimilarity: ss,
+            colors: [],
+         }
+   
+         var splitGuess_noUpper = guess.split(" ")
+         var splitGuess = guess.toUpperCase().split(" ")
+         // console.log("splitGuess: " + splitGuess)
+         // console.log("props.split_description: " + props.split_description)
+   
+         for (var i = 0; i < splitGuess.length; i++) {
+            const relevantWord = splitGuess[i]
+            console.log("relevantWord: " + relevantWord)
+            const locInDesc = props.split_description.indexOf(relevantWord)
+            console.log("locInDesc: " + locInDesc)
+   
+            if (locInDesc !== -1) {
+               // console.log("this item is in the description")
+               if (locInDesc === i) {
+                  //  console.log("guess index is correct, too (i is " + i + ")")
+                  currentGuessCombo.colors.push("#6aaa64")
+               } else {
+                  currentGuessCombo.colors.push("#c9b458")
+               }
+            } else {
+               currentGuessCombo.colors.push("#787c7e")
+            }
+         }
+   
+         // console.log("colors: " + currentGuessCombo.colors)
+   
+         var html = "<p>"
+         for (var i = 0; i < currentGuessCombo.colors.length; i++) {
+            html +=
+               '<span style="color: ' +
+               currentGuessCombo.colors[i] +
+               '">' +
+               splitGuess_noUpper[i] +
+               "</span>"
+            if (i < currentGuessCombo.colors.length - 1) {
+               html += " "
+            }
+         }
+         html += "</p>"
+         currentGuessCombo.html = html
+   
+         setGuesses((guesses) => [...guesses, currentGuessCombo])
+   
+         // is this the right semantic similarity to compare to?
+         if (
+            guess.toUpperCase() === props.text_description.toUpperCase() ||
+            (!isNaN(ss) && Number(ss) === 1)
+         ) {
+            setLoading(false)
+            setSolved(true)
+            handleSolve()
+            return
+         }
+         setLoading(false)
+         return
    }
 
    return (
