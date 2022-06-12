@@ -1,4 +1,4 @@
-.winOverlayContainer, .statsOverlayContainer {
+.winOverlayContainer, .statsOverlayContainer, .directionsOverlayContainer {
   display: flex;
   height: 100vh;
   width: 100vw;
@@ -15,12 +15,12 @@
   -webkit-animation: 3s ease 0s normal forwards 1 fadein;
 }
 
-.statsOverlayContainer {
+.statsOverlayContainer, .directionsOverlayContainer {
   animation: 0.2s ease 0s normal forwards 1 fadein;
   -webkit-animation: 0.2s ease 0s normal forwards 1 fadein;
 }
 
-.winContainer, .statsContainer {
+.winContainer, .statsContainer, .directionsContainer {
     display: flex;
     flex-direction: column;
     background-color: white;
@@ -64,6 +64,27 @@
     margin-left: auto;
     margin-right: auto;
     margin-top: 10px;
+}
+
+.directionsContainer > p {
+  text-align: left;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  font-size: 14px;
+}
+
+.playButton {
+  color: white;
+  padding: .5rem 1rem;
+  background-color: var(--green);
+  border-radius: 4px;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+}
+
+.playButton:active {
+  filter: brightness(0.8);
 }
 
 @media (max-width: 550px) {

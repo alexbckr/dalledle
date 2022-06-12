@@ -3,6 +3,7 @@ import styles from "../styles/Home.module.css"
 import Header from "../components/Header"
 import WinOverlay from "../components/WinOverlay"
 import StatsOverlay from "../components/StatsOverlay"
+import DirectionsOverlay from "../components/DirectionsOverlay"
 import { prisma } from "../lib/prisma.js"
 import { useState, useEffect } from "react"
 import parse from "html-react-parser"
@@ -57,6 +58,7 @@ export default function Home(props) {
    const [overlayVisible, setOverlayVisible] = useState(false)
    const [winVisible, setWinVisible] = useState(false)
    const [statsVisible, setStatsVisible] = useState(false)
+   const [directionsVisible, setDirectionsVisible] = useState(false)
    const [loading, setLoading] = useState(false)
 
    function handleGuess(guess) {
@@ -149,14 +151,23 @@ export default function Home(props) {
       document.getElementById("guess").disabled = true
       document.getElementById("vg").disabled = true
       setStatsVisible(false)
+      setDirectionsVisible(false)
       setWinVisible(true)
       setOverlayVisible(true)
    }
 
    function handleStatsClick() {
       setOverlayVisible(true)
+      setDirectionsVisible(false)
       setWinVisible(false)
       setStatsVisible(true)
+   }
+
+   function handleDirectionsClick() {
+      setOverlayVisible(true)
+      setWinVisible(false)
+      setDirectionsVisible(true)
+      setStatsVisible(false)
    }
 
    // prereq: guess should be string
@@ -202,6 +213,7 @@ export default function Home(props) {
                   <WinOverlay guessNum={guesses.length} imageUrl={props.url} />
                )}
                {statsVisible && <StatsOverlay />}
+               {directionsVisible && <DirectionsOverlay dismiss={() => setOverlayVisible(false)}/>}
             </div>
          )}
          <div className={styles.container}>
@@ -211,7 +223,7 @@ export default function Home(props) {
                <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <Header handleStatsClick={handleStatsClick} />
+            <Header handleStatsClick={handleStatsClick} handleDirectionsClick={handleDirectionsClick} />
 
             <main
                className={styles.main}
