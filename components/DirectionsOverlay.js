@@ -13,9 +13,9 @@ export default function DirectionsOverlay(props) {
             </p>
             <p>
                After each guess, the color of the word in the table will display
-               whether the word is in the correct place in the sentence (green),
-               the word is in the sentence but in the wrong place (yellow), or
-               not in the sentence (grey).
+               whether the word is in the correct place in the sentence &aposgreen\),
+               the word is in the sentence but in the wrong place \(yellow\), or
+               not in the sentence \(grey\).
             </p>
             <p>
                *note: Treat each image in a grid as an individual image. They

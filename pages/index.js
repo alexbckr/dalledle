@@ -71,7 +71,7 @@ export default function Home(props) {
          guess === null ||
          guess.toString().trim() === "" ||
          solved === true ||
-         guess.toString().split(" ").length > 20 
+         guess.toString().split(" ").length > 20
       ) {
          return -1
       }
@@ -213,7 +213,9 @@ export default function Home(props) {
                   <WinOverlay guessNum={guesses.length} imageUrl={props.url} />
                )}
                {statsVisible && <StatsOverlay />}
-               {directionsVisible && <DirectionsOverlay dismiss={() => setOverlayVisible(false)}/>}
+               {directionsVisible && (
+                  <DirectionsOverlay dismiss={() => setOverlayVisible(false)} />
+               )}
             </div>
          )}
          <div className={styles.container}>
@@ -221,9 +223,29 @@ export default function Home(props) {
                <title>DALL-Edle</title>
                <meta name="description" content="Inspired by DALL-E" />
                <link rel="icon" href="/favicon.ico" />
+               {/* Global Site Tag (gtag.js) - Google Analytics */}
+               <script
+                  async
+                  src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+               />
+               <script
+                  dangerouslySetInnerHTML={{
+                     __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+              page_path: window.location.pathname,
+            });
+          `,
+                  }}
+               />
             </Head>
 
-            <Header handleStatsClick={handleStatsClick} handleDirectionsClick={handleDirectionsClick} />
+            <Header
+               handleStatsClick={handleStatsClick}
+               handleDirectionsClick={handleDirectionsClick}
+            />
 
             <main
                className={styles.main}
