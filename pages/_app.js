@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import Script from 'next/script'
 import * as gtag from '../lib/gtag'
 
 function MyApp({ Component, pageProps }) {
