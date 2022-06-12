@@ -55,7 +55,7 @@
   margin-left: 10px;
 }
 
-.enterButton::selection, .header::selection, .unsolvedState::selection {
+.enterButton::selection, .header::selection, .display::selection {
   background-color: rgba(0,0,0,0);
 }
 
@@ -69,13 +69,34 @@
   flex-grow: 1;
 }
 
-.unsolvedState {
+.display {
   letter-spacing: 2px;
   font-size: 24px;
   cursor: default;
   margin-left: auto;
   margin-right: auto;
   margin-top: 20px;
+}
+
+.tableSemanticSimilarity {
+  width: 60px;
+}
+
+.table {
+  display: table;
+  max-width: 100%;
+}
+
+.tableGuessNum {
+  width: 40px;
+}
+
+.tableText {
+  display: block;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media (max-width: 420px) {
