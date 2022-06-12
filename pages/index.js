@@ -5,7 +5,7 @@ import { prisma } from "../lib/prisma.js"
 import { useState, useEffect } from "react"
 import parse from "html-react-parser"
 
-export const getStaticProps = async ({ params }) => {
+export const getServerSideProps = async () => {
    var date = new Date()
    var year = date.getFullYear()
    var day = date.getDate()
