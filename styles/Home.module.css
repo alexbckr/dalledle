@@ -16,21 +16,6 @@
   border: 2px solid #D3D6DA;
 }
 
-.header {
-  height: 50px;
-  border-bottom: 1px solid #D3D6DA;
-  min-width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-
-  font-size: 24px;
-  font-weight: 900;
-
-  cursor: default;
-}
-
 .game {
   margin-top: 40px;
   display: flex;
@@ -112,20 +97,6 @@
   color: orange;
 }
 
-.overlayContainer {
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255,255,255,0.5);
-  position: absolute;
-  z-index: 1;
-  animation: 3s ease 0s normal forwards 1 fadein;
-  -webkit-animation: 3s ease 0s normal forwards 1 fadein;
-  opacity:1
-}
-
 @media (max-width: 420px) {
   .main {
     max-width: calc(100vw);
@@ -173,10 +144,4 @@
   100% {
     transform: rotateX(0deg);
   }
-}
-
-@keyframes fadein{
-  0%{opacity:0}
-  80%{opacity:0}
-  100%{opacity:1}
 }

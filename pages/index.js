@@ -2,6 +2,7 @@ import Head from "next/head"
 import styles from "../styles/Home.module.css"
 import Header from "../components/Header"
 import WinOverlay from "../components/WinOverlay"
+import StatsOverlay from "../components/StatsOverlay"
 import { prisma } from "../lib/prisma.js"
 import { useState, useEffect } from "react"
 import parse from "html-react-parser"
@@ -54,6 +55,8 @@ export default function Home(props) {
    const [display, setDisplay] = useState(props.initialState)
    const [guesses, setGuesses] = useState([])
    const [overlayVisible, setOverlayVisible] = useState(false)
+   const [winVisible, setWinVisible] = useState(false)
+   const [statsVisible, setStatsVisible] = useState(false)
    const [loading, setLoading] = useState(false)
 
    function handleGuess(guess) {
@@ -65,7 +68,8 @@ export default function Home(props) {
       if (
          guess === null ||
          guess.toString().trim() === "" ||
-         guess.toString().split(" ").length > 20
+         solved === true ||
+         guess.toString().split(" ").length > 20 
       ) {
          return -1
       }
@@ -142,7 +146,17 @@ export default function Home(props) {
       console.log("puzzle solved")
       setDisplay(props.text_description)
       setSolved(true)
+      document.getElementById("guess").disabled = true
+      document.getElementById("vg").disabled = true
+      setStatsVisible(false)
+      setWinVisible(true)
       setOverlayVisible(true)
+   }
+
+   function handleStatsClick() {
+      setOverlayVisible(true)
+      setWinVisible(false)
+      setStatsVisible(true)
    }
 
    // prereq: guess should be string
@@ -180,10 +194,14 @@ export default function Home(props) {
    return (
       <>
          {overlayVisible && (
-            <div className={styles.overlayContainer}>
-                {solved && (
-                  <WinOverlay guessNum={guesses.length} imageUrl={props.url}/>
-                )}
+            <div
+               className={styles.overlayContainer}
+               onClick={() => setOverlayVisible(false)}
+            >
+               {winVisible && (
+                  <WinOverlay guessNum={guesses.length} imageUrl={props.url} />
+               )}
+               {statsVisible && <StatsOverlay />}
             </div>
          )}
          <div className={styles.container}>
@@ -193,7 +211,7 @@ export default function Home(props) {
                <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <Header />
+            <Header handleStatsClick={handleStatsClick} />
 
             <main
                className={styles.main}
@@ -217,6 +235,7 @@ export default function Home(props) {
                      <input className={styles.inputBox} id="guess"></input>
                      <div
                         className={styles.enterButton}
+                        id="vg"
                         onClick={() =>
                            handleGuess(document.getElementById("guess").value)
                         }

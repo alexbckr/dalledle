@@ -1,0 +1,28 @@
+.header {
+   height: 50px;
+   border-bottom: 1px solid #d3d6da;
+   min-width: 100vw;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   text-align: center;
+
+   cursor: default;
+}
+
+.logo {
+   flex-grow: 1;
+   font-size: 24px;
+   font-weight: 900;
+}
+
+.navbarButton {
+    margin-right: 30px;
+    margin-left: 30px;
+    font-size: 18px;
+}
+
+.navbarButton:hover {
+    color: #ccc;
+    cursor: pointer;
+}

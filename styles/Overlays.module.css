@@ -1,15 +1,39 @@
-.container {
+.winOverlayContainer, .statsOverlayContainer {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255,255,255,0.5);
+  position: absolute;
+  z-index: 1;
+  opacity:1
+}
+
+.winOverlayContainer {
+  animation: 3s ease 0s normal forwards 1 fadein;
+  -webkit-animation: 3s ease 0s normal forwards 1 fadein;
+}
+
+.statsOverlayContainer {
+  animation: 0.2s ease 0s normal forwards 1 fadein;
+  -webkit-animation: 0.2s ease 0s normal forwards 1 fadein;
+}
+
+.winContainer, .statsContainer {
     display: flex;
     flex-direction: column;
     background-color: white;
     max-height: 90%;
-    max-width: 500px;
+    width: 500px;
     padding: 16px;
     box-shadow: 0 4px 23px 0 rgb(0 0 0 / 20%);
     border-radius: 8px;
 
     text-align: center;
+}
 
+.winContainer {
     animation: flip 0.8s ease-in-out;
     animation-delay: 3.5s;
 }
@@ -65,4 +89,10 @@
     100% {
       transform: rotateX(0deg);
     }
+}
+
+@keyframes fadein{
+  0%{opacity:0}
+  80%{opacity:0}
+  100%{opacity:1}
 }
