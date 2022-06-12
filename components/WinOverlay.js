@@ -16,7 +16,7 @@ export default function WinOverlay(props) {
     return (
         <div className={styles.container}>
            <h1 className={styles.header}>Woooo!</h1>
-           <p>You solved DALL-Edle on {getDate()}. It took {props.guessNum} guesses.</p>
+           <p>You solved DALL-Edle on {getDate()}. It took {props.guessNum + " " + (props.guessNum === 1 ? "guess." : "guesses.")}</p>
            <img src={props.imageUrl} className={styles.image}></img>
            <div className={styles.shareButton}>Share</div>
         </div>
