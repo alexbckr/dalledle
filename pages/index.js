@@ -3,6 +3,7 @@ import styles from "../styles/Home.module.css"
 import Header from "../components/Header"
 import { prisma } from "../lib/prisma.js"
 import { useState, useEffect } from "react"
+import ReactHtmlParser from "react-html-parser"
 
 export const getStaticProps = async ({ params }) => {
    var date = new Date()
@@ -54,7 +55,6 @@ export default function Home(props) {
    const [loading, setLoading] = useState(false)
 
    function handleGuess(guess) {
-      console.log("GETTING STARTED ___________________")
       for (var i = 0; i < guesses.length; i++) {
         console.log("guesses[" + i + "]: " + guesses[i].text)
       }
@@ -68,6 +68,8 @@ export default function Home(props) {
          return -1
       }
 
+      document.getElementById("guess").value = ""
+
       // here's a bit
       var semanticSimilarity = 0.8
       let currentGuessCombo = {
@@ -77,22 +79,10 @@ export default function Home(props) {
          colors: [],
       }
 
-      // is this the right semantic similarity to compare to?
-      if (guess === props.text_description || semanticSimilarity > 0.98) {
-         currentGuessCombo.colors.push("all_green")
-         setGuesses(guesses => [...guesses, currentGuessCombo])
-
-         setLoading(false)
-         setSolved(true)
-         handleSolve()
-
-         return
-      }
-
+      var splitGuess_noUpper = guess.split(" ")
       var splitGuess = guess.toUpperCase().split(" ")
-      console.log("splitGuess: " + splitGuess)
-      console.log("props.split_description: " + props.split_description)
-      console.log("here we go")
+      // console.log("splitGuess: " + splitGuess)
+      // console.log("props.split_description: " + props.split_description)
 
       for (var i = 0; i < splitGuess.length; i++) {
          const relevantWord = splitGuess[i]
@@ -101,9 +91,9 @@ export default function Home(props) {
          console.log("locInDesc: " + locInDesc)
 
          if (locInDesc !== -1) {
-            console.log("this item is in the description")
+            // console.log("this item is in the description")
             if (locInDesc === i) {
-               console.log("guess index is correct, too (i is " + i + ")")
+              //  console.log("guess index is correct, too (i is " + i + ")")
                currentGuessCombo.colors.push("green")
             } else {
                currentGuessCombo.colors.push("yellow")
@@ -113,18 +103,35 @@ export default function Home(props) {
          }
       }
 
-      console.log("colors: " + currentGuessCombo.colors)
-      setGuesses(guesses => [...guesses, currentGuessCombo]);
-      for (var i = 0; i < guesses.length; i++) {
-        console.log("guesses[" + i + "]: " + guesses[i].text)
-      }
+      // console.log("colors: " + currentGuessCombo.colors)
 
-      return
+      var html = "<p>"
+      for (var i = 0; i < currentGuessCombo.colors.length; i++) {
+          html += "<span style=\"color: " + currentGuessCombo.colors[i] + "\">" + splitGuess_noUpper[i] + "</span>"
+          if (i < currentGuessCombo.colors.length - 1) {
+              html += " "
+          }
+      }
+      html += "</p>"
+      currentGuessCombo.html = html
+
+
+      setGuesses(guesses => [...guesses, currentGuessCombo]);
+
+      // is this the right semantic similarity to compare to?
+      if (guess.toUpperCase() === props.text_description.toUpperCase() || semanticSimilarity > 0.98) {
+        setLoading(false)
+        setSolved(true)
+        handleSolve()
+        return
+     }
+     setLoading(false)
+     return
    }
 
    function handleSolve() {
       console.log("puzzle solved")
-      setDisplay(props.textDescription)
+      setDisplay(props.text_description)
    }
 
    // prereq: guess should be string
@@ -177,7 +184,6 @@ export default function Home(props) {
                   src={props.url}
                ></img>
                <div className={styles.display}>{display}</div>
-               {solved && <div>Solved</div>}
                <div className={styles.inputSection}>
                   <input className={styles.inputBox} id="guess"></input>
                   <div
@@ -206,14 +212,16 @@ export default function Home(props) {
                               <td className={styles.tableGuessNum}>
                                  {guess.key}
                               </td>
-                              <td className={styles.tableText}>{guess.text}</td>
+                              <td className={styles.tableText}>
+                                  {ReactHtmlParser(guess.html)}
+                              </td>
                               <td
                                  className={styles.tableSemanticSimilarityTable}
                               >
                                  {guess.semanticSimilarity}
                               </td>
                            </tr>
-                        ))}
+                        )).reverse()}
                      </tbody>
                   </table>
                )}

@@ -85,6 +85,8 @@
 .table {
   display: table;
   max-width: 100%;
+  max-width: 420px;
+  margin-top: 20px;
 }
 
 .tableGuessNum {
@@ -92,8 +94,7 @@
 }
 
 .tableText {
-  display: block;
-  max-width: 90%;
+  max-width: 320px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -120,5 +121,9 @@
 
   .enterButton {
     margin-top: 10px;
+  }
+
+  .tableText {
+    max-width: calc(100vw - 100px)
   }
 }
