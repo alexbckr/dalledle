@@ -94,12 +94,12 @@ export default function Home(props) {
             // console.log("this item is in the description")
             if (locInDesc === i) {
               //  console.log("guess index is correct, too (i is " + i + ")")
-               currentGuessCombo.colors.push("green")
+               currentGuessCombo.colors.push("#6aaa64")
             } else {
-               currentGuessCombo.colors.push("yellow")
+               currentGuessCombo.colors.push("#c9b458")
             }
          } else {
-            currentGuessCombo.colors.push("grey")
+            currentGuessCombo.colors.push("#787c7e")
          }
       }
 
