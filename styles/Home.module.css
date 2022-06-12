@@ -69,7 +69,7 @@
   flex-grow: 1;
 }
 
-.display {
+.display, .displaySolved {
   padding-left: 20px;
   padding-right: 20px;
   letter-spacing: 2px;
@@ -78,6 +78,11 @@
   margin-left: auto;
   margin-right: auto;
   margin-top: 20px;
+}
+
+.displaySolved {
+  letter-spacing: normal;
+  animation: flip 0.8s ease forwards;
 }
 
 .tableSemanticSimilarity {
@@ -133,5 +138,20 @@
     max-width: calc(100vw - 100px);
     word-wrap: break-word;
     white-space: normal!important;
+  }
+}
+
+@keyframes flip {
+  0% {
+    transform: rotateX(0deg);
+  }
+  45% {
+    transform: rotateX(90deg);
+  }
+  55% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
   }
 }

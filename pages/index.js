@@ -183,7 +183,7 @@ export default function Home(props) {
                   className={styles.mainImage}
                   src={props.url}
                ></img>
-               <div className={styles.display}>{display}</div>
+               <div className={solved ? styles.displaySolved : styles.display}>{display}</div>
                <div className={styles.inputSection}>
                   <input className={styles.inputBox} id="guess"></input>
                   <div
