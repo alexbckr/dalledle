@@ -71,15 +71,24 @@ export default function Home(props) {
          guess === null ||
          guess.toString().trim() === "" ||
          solved === true ||
-         guess.toString().split(" ").length > 20 
+         guess.toString().split(" ").length > 20
       ) {
          return -1
       }
 
       document.getElementById("guess").value = ""
 
+      var semanticSimilarity = "0"
       // here's a bit
-      var semanticSimilarity = 0.8
+      if (guess.toString().trim() !== "" && guess.split(" ").length > 2) {
+         // run semantic sim function (coming soon ig)
+         semanticSimilarity = ":("
+      } else {
+         semanticSimilarity = ":("
+      }
+
+      console.log("semantic sim is " + semanticSimilarity)
+
       let currentGuessCombo = {
          key: guesses.length + 1,
          text: guess,
@@ -133,7 +142,7 @@ export default function Home(props) {
       // is this the right semantic similarity to compare to?
       if (
          guess.toUpperCase() === props.text_description.toUpperCase() ||
-         semanticSimilarity > 0.98
+         (!isNaN(semanticSimilarity) && Number(semanticSimilarity) > 0.98)
       ) {
          setLoading(false)
          setSolved(true)
@@ -202,6 +211,34 @@ export default function Home(props) {
          .catch((err) => console.error("error:" + err))
    }
 
+   //prereq: guess should string
+   function getSemanticSimilarity_testing(guess) {
+
+      if (guess === null || guess.toString().trim() === "") {
+         return -1
+      }
+
+      const text1 = encodeURIComponent(guess.trim())
+      const text2 = encodeURIComponent(props.text_description.trim())
+
+      var requestOptions = {
+         method: "GET",
+         redirect: "follow",
+      }
+
+      fetch(
+         "https://api.dandelion.eu/datatxt/sim/v1/?text1=" +
+            text1 +
+            " &text2=" +
+            text2 +
+            "&lang=en&token=" + process.env.DANDELION_TOKEN,
+         requestOptions
+      )
+         .then((response) => response.text())
+         .then((result) => {return result.similarity })
+         .catch((error) => console.log("error", error))
+   }
+
    return (
       <>
          {overlayVisible && (
@@ -213,7 +250,9 @@ export default function Home(props) {
                   <WinOverlay guessNum={guesses.length} imageUrl={props.url} />
                )}
                {statsVisible && <StatsOverlay />}
-               {directionsVisible && <DirectionsOverlay dismiss={() => setOverlayVisible(false)}/>}
+               {directionsVisible && (
+                  <DirectionsOverlay dismiss={() => setOverlayVisible(false)} />
+               )}
             </div>
          )}
          <div className={styles.container}>

@@ -98,14 +98,18 @@
 }
 
 @media (max-width: 420px) {
+  .game {
+    margin-top: 10px;
+  }
+
   .main {
     max-width: calc(100vw);
   }
 
   .mainImage {
-    width: 100vw;
-    margin-left: 0px;
-    margin-right: 0px;
+    width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .inputSection {

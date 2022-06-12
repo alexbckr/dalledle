@@ -15,6 +15,8 @@ model image {
   text_description  String @default ("")
   url               String @default ("")
   date              String @default ("") @unique
+  source            String @default ("")
+  source_user       String @default ("")
   createdAt         DateTime @default(now())
   updatedAt         DateTime @default(now())
 }
