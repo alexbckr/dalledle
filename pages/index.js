@@ -3,7 +3,7 @@ import styles from "../styles/Home.module.css"
 import Header from "../components/Header"
 import { prisma } from "../lib/prisma.js"
 import { useState, useEffect } from "react"
-import ReactHtmlParser from "react-html-parser"
+import parse from "html-react-parser"
 
 export const getStaticProps = async ({ params }) => {
    var date = new Date()
@@ -213,7 +213,7 @@ export default function Home(props) {
                                  {guess.key}
                               </td>
                               <td className={styles.tableText}>
-                                  {ReactHtmlParser(guess.html)}
+                                  {parse(guess.html)}
                               </td>
                               <td
                                  className={styles.tableSemanticSimilarityTable}
