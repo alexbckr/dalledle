@@ -70,6 +70,8 @@
 }
 
 .display {
+  padding-left: 20px;
+  padding-right: 20px;
   letter-spacing: 2px;
   font-size: 24px;
   cursor: default;

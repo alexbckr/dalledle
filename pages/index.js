@@ -176,7 +176,7 @@ export default function Home(props) {
 
          <Header />
 
-         <main className={styles.main}>
+         <main className={styles.main} onKeyPress={(e) => e.key === 'Enter' && handleGuess(document.getElementById("guess").value)}>
             <div className={styles.game}>
                <img
                   draggable="false"
