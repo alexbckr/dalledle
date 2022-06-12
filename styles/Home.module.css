@@ -154,6 +154,10 @@
     word-wrap: break-word;
     white-space: normal!important;
   }
+
+  .display {
+    max-width: 100vw;
+  }
 }
 
 @keyframes flip {
