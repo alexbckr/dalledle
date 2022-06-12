@@ -124,6 +124,8 @@
   }
 
   .tableText {
-    max-width: calc(100vw - 100px)
+    max-width: calc(100vw - 100px);
+    word-wrap: break-word;
+    white-space: normal!important;
   }
 }
