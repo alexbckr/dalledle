@@ -8,6 +8,7 @@ import FAQOverlay from "../components/FAQOverlay"
 import { prisma } from "../lib/prisma.js"
 import { useState, useEffect } from "react"
 import parse from "html-react-parser"
+import * as gtag from "../lib/gtag"
 
 export const getServerSideProps = async () => {
    var date = new Date()
@@ -66,6 +67,7 @@ export default function Home(props) {
 
    // runs onload
    useEffect(() => {
+      gtag.pageview("/")
       var resetOnRefresh = false
       const dalledle_state = localStorage.getItem("dalledle_state")
       if (!dalledle_state || resetOnRefresh) {
@@ -230,6 +232,7 @@ export default function Home(props) {
             incrementSolves()
          }
          if (firstGuess) {
+            console.log("this was the first guess on this date. incrementing games played")
             parsed_statistics.gamesPlayed =
                (parsed_statistics.gamesPlayed === ""
                   ? 0
@@ -381,6 +384,12 @@ export default function Home(props) {
    }
 
    function completeGuessProcessing(ss, guess) {
+      gtag.event({
+         action: 'guess_submitted',
+         category: props.dateStamp,
+         label: guess,
+      })
+
       if (!isNaN(ss)) {
          ss = "" + Number(ss).toFixed(3)
       }
@@ -432,7 +441,6 @@ export default function Home(props) {
       var firstGuess = currentGuessCombo.key <= 1 ? true : false
 
       if (firstGuess) {
-         //prisma
          incrementPlays()
       }
 
@@ -443,6 +451,11 @@ export default function Home(props) {
          setSolved(true)
          handleSolve()
          setLoading(false)
+         gtag.event({
+            action: 'puzzle_solved',
+            category: props.dateStamp,
+            label: new Date().toLocaleString,
+         })
          updateLocalStorage(true, firstGuess)
          return
       }
