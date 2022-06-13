@@ -13,8 +13,8 @@ export default function WinOverlay(props) {
    }
 
    return (
-      <div className={styles.winOverlayContainer} onClick={() => props.dismiss()}>
-         <div className={styles.winContainer} onClick={() => {}}>
+      <div className={styles.winOverlayContainer}>
+         <div className={styles.winContainer}>
             <h1 className={styles.header}>Woooo!</h1>
             <p>
                You solved DALL-Edle on {getDate()}. It took{" "}
@@ -28,11 +28,11 @@ export default function WinOverlay(props) {
                className={styles.shareButton}
                onClick={() => {
                 navigator.clipboard.writeText("I solved the DALL-Edle 6/12/2022 puzzle in " + (props.guessNum) + (props.guessNum === 1 ? " guess." : " guesses.") + " http://dalledle.com")
-                alert("Copied to clipboard!")
                 }}
             >
                Share
             </div>
+            <div onClick={() => props.dismiss()} className={styles.closeButton}>Close</div>
          </div>
       </div>
    )
