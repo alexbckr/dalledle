@@ -429,7 +429,7 @@ export default function Home(props) {
 
       setGuesses((guesses) => [...guesses, currentGuessCombo])
 
-      var firstGuess = guesses.length <= 1 ? true : false
+      var firstGuess = currentGuessCombo.key <= 1 ? true : false
 
       if (firstGuess) {
          //prisma
