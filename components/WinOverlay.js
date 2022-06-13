@@ -27,7 +27,7 @@ export default function WinOverlay(props) {
             <div
                className={styles.shareButton}
                onClick={() => {
-                navigator.clipboard.writeText("I solved the DALL-Edle 6/12/2022 puzzle in " + (props.guessNum) + (props.guessNum === 1 ? " guess." : " guesses.") + " http://dalledle.com")
+                navigator.clipboard.writeText("I solved the DALL-Edle " + getDate() + " puzzle in " + (props.guessNum) + (props.guessNum === 1 ? " guess." : " guesses.") + " http://dalledle.com")
                 }}
             >
                Share
