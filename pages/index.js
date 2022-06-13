@@ -19,6 +19,7 @@ export const getServerSideProps = async () => {
    day = day < 10 ? "0" + day : day
    month = month < 10 ? "0" + month : month
 
+   // var isoDate = "2022-06-14"
    var isoDate = year + "-" + month + "-" + day
 
    const image = await prisma.image.findUnique({
@@ -68,15 +69,17 @@ export default function Home(props) {
    // runs onload
    useEffect(() => {
       gtag.pageview("/")
-      var resetOnRefresh = false
+      // both should be false in prod
+      var resetStateOnRefresh = false
+      var resetStatsOnRefresh = false
       const dalledle_state = localStorage.getItem("dalledle_state")
-      if (!dalledle_state || resetOnRefresh) {
+      if (!dalledle_state || resetStatsOnRefresh) {
          // no local storage found
          initiateLocalStorage()
       } else {
          console.log("local storage found")
          var parsed = JSON.parse(dalledle_state)
-         console.log("game status: ",parsed.gameStatus)
+         console.log("game status: ", parsed.gameStatus)
 
          // TODO: check if game state needs to be reset
 
@@ -86,8 +89,8 @@ export default function Home(props) {
          )
          console.log("parsed.datestamp (their last play): ", parsed.dateStamp)
 
-         if (props.dateStamp !== parsed.dateStamp) {
-            newPuzzleResetState(parsed.lastCompleted, parsed.lastPlayed)
+         if (props.dateStamp !== parsed.dateStamp || resetStateOnRefresh) {
+            newPuzzleResetState(parsed.lastCompletedTs, parsed.lastPlayedTs)
          } else {
             if (parsed.gameStatus === "IN_PROGRESS") {
                console.log("game in progress")
@@ -215,14 +218,19 @@ export default function Home(props) {
          const dalledle_statistics = localStorage.getItem("dalledle_statistics")
          var parsed_statistics = JSON.parse(dalledle_statistics)
          if (isSolved) {
-            parsed_statistics.gamesWon = (parsed.gamesWon || 0) + 1
-            parsed_statistics.currentStreak = (parsed.currentStreak || 0) + 1
+            parsed_statistics.gamesWon =
+               (isNaN(parsed_statistics.gamesWon) ? 0 : Number(parsed_statistics.gamesWon)) + 1
+            parsed_statistics.currentStreak =
+               (isNaN(parsed_statistics.currentStreak)
+                  ? 0
+                  : Number(parsed_statistics.currentStreak)) + 1
             if (
                isNaN(parsed_statistics.maxStreak) ||
                Number(parsed_statistics.currentStreak) >
                   Number(parsed_statistics.maxStreak)
             ) {
-               parsed_statistics.maxStreak = parsed_statistics.currentStreak
+               parsed_statistics.maxStreak =
+                  Number(parsed_statistics.currentStreak)
             }
             parsed_statistics.winPercentage =
                (Number(parsed_statistics.gamesWon) /
