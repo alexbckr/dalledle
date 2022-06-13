@@ -388,11 +388,15 @@ export default function Home(props) {
                }}
             >
                {winVisible && (
-                  <WinOverlay guessNum={guesses.length} imageUrl={props.url} dismiss={() => {
-                     setOverlayVisible(false)
-                     setWinVisible(false)
-                  }
-                  } />
+                  <WinOverlay
+                     guessNum={guesses.length}
+                     imageUrl={props.url}
+                     date={props.dateStamp}
+                     dismiss={() => {
+                        setOverlayVisible(false)
+                        setWinVisible(false)
+                     }}
+                  />
                )}
                {statsVisible && <StatsOverlay />}
                {directionsVisible && (

@@ -1,14 +1,14 @@
+import { useEffect } from "react";
 import styles from "../styles/Overlays.module.css"
 
 export default function WinOverlay(props) {
+
    function getDate() {
-      var date = new Date()
-      var year = date.getFullYear()
-      var day = date.getDate()
-      var month = date.getMonth() + 1
-
-      var isoDate = month + "/" + day + "/" + year
-
+      if (props.date === null || props.date == undefined) {
+        return "";
+      }
+      var date_array = props.date.split("-")
+      var isoDate = date_array[1] + "/" + date_array[2] + "/" + date_array[0]
       return isoDate
    }
 
