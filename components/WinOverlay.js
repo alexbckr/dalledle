@@ -12,12 +12,6 @@ export default function WinOverlay(props) {
       return isoDate
    }
 
-   function CopyToClipboard() {
-        var text = "I solved the DALL-Edle 6/12/2022 puzzle in " + (props.guessNum) + (props.guessNum === 1 ? " guess." : " guesses.") + " http://dalledle.com"
-        navigator.clipboard.writeText(text.toString());
-        alert("Copied to clipboard!")
-   }
-
    return (
       <div className={styles.winOverlayContainer}>
          <div className={styles.winContainer}>
@@ -32,7 +26,7 @@ export default function WinOverlay(props) {
             <img src={props.imageUrl} className={styles.image}></img>
             <div
                className={styles.shareButton}
-               onClick={() => CopyToClipboard()}
+               onClick={() => navigator.clipboard.writeText("I solved the DALL-Edle 6/12/2022 puzzle in " + (props.guessNum) + (props.guessNum === 1 ? " guess." : " guesses.") + " http://dalledle.com")}
             >
                Share
             </div>
