@@ -252,7 +252,7 @@ export default function Home(props) {
    //prereq: guess should string
    function getSemanticSimilarity_testing(guess, isValid) {
       // I didn't enter my cc for this token, so I'm fine with exposing it? is that ok?
-      var dev = true
+      var dev = false
       var token = dev ? "oops" : "1202e2ee98174fba9b340300b3855bc2"
 
       if (!isValid || guess === null || guess.toString().trim() === "") {
