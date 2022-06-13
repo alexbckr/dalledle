@@ -61,10 +61,67 @@ export default function Home(props) {
    const [directionsVisible, setDirectionsVisible] = useState(true)
    const [loading, setLoading] = useState(false)
 
-   useEffect(() => {
-      console.log("useEffect running")
 
-   }, [guesses, solved])
+   // runs onload
+   useEffect(() => {
+      console.log("running useEffect")
+      const dalledle_state = localStorage.getItem("dalledle_state")
+      if (!dalledle_state) {
+         // no local storage found
+         initiateLocalStorage()
+      } else {
+         console.log("local storage found")
+         var parsed = JSON.parse(dalledle_state)
+         console.log("game status: ", parsed.gameStatus)
+         if (parsed.gameStatus === "IN_PROGRESS") {
+            console.log("game in progress")
+            setOverlayVisible(false)
+            setDirectionsVisible(false)
+            setGuesses(parsed.guesses)
+         }
+         else if (parsed.gameStatus === "SOLVED") {
+            console.log("game solved")
+            setGuesses(parsed.guesses)
+            handleSolve()
+         }
+      }
+   }, [])
+
+   function initiateLocalStorage() {
+      console.log("no local storage found")
+      var initialDalledleState = {
+         gameStatus: "IN_PROGRESS",
+         guesses: [],
+         lastCompletedTs: "",
+         lastPlayedTs: "",
+      }
+      localStorage.setItem("dalledle_state", JSON.stringify(initialDalledleState))
+   }
+
+   function updateLocalStorage(isSolved) {
+      console.log("updating local storage")
+      const dalledle_state = localStorage.getItem("dalledle_state")
+      if (!dalledle_state) {
+         // no local storage found (just in case)
+         initiateLocalStorage()
+      } else {
+         // we should be here
+         console.log("local storage found")
+         var parsed = JSON.parse(dalledle_state)
+         
+         parsed.guesses = guesses
+         if (isSolved) {
+            console.log("game solved")
+            parsed.gameStatus = "SOLVED"
+            parsed.lastCompletedTs = new Date().toISOString()
+         } else {
+            parsed.gameStatus = "IN_PROGRESS"
+         }
+
+         console.log("updating local storage:", parsed)
+         localStorage.setItem("dalledle_state", JSON.stringify(parsed))
+      }
+   }
 
    function handleGuess(guess) {
       for (var i = 0; i < guesses.length; i++) {
@@ -84,7 +141,6 @@ export default function Home(props) {
       document.getElementById("guess").value = ""
 
       if (guess.toString().trim() !== "" && guess.split(" ").length > 2) {
-         // run semantic sim function (coming soon ig)
          getSemanticSimilarity_testing(guess.toString().trim(), true)
       } else {
          getSemanticSimilarity_testing(guess.toString().trim(), false)
@@ -155,9 +211,9 @@ export default function Home(props) {
 
    //prereq: guess should string
    function getSemanticSimilarity_testing(guess, isValid) {
-
       // I didn't enter my cc for this token, so I'm fine with exposing it? is that ok?
-      var token = "1202e2ee98174fba9b340300b3855bc2"
+      var dev = false
+      var token = dev ? "oops" : "1202e2ee98174fba9b340300b3855bc2"
 
       if (!isValid || guess === null || guess.toString().trim() === "") {
          return completeGuessProcessing(":(", guess)
@@ -176,7 +232,8 @@ export default function Home(props) {
             text1 +
             " &text2=" +
             text2 +
-            "&lang=en&token=" + token,
+            "&lang=en&token=" +
+            token,
          requestOptions
       )
          .then((response) => response.text())
@@ -192,73 +249,74 @@ export default function Home(props) {
    }
 
    function completeGuessProcessing(ss, guess) {
-
       if (!isNaN(ss)) {
          ss = "" + Number(ss).toFixed(3)
       }
 
       let currentGuessCombo = {
-            key: guesses.length + 1,
-            text: guess,
-            semanticSimilarity: ss,
-            colors: [],
-         }
-   
-         var splitGuess_noUpper = guess.split(" ")
-         var splitGuess = guess.toUpperCase().split(" ")
-         // console.log("splitGuess: " + splitGuess)
-         // console.log("props.split_description: " + props.split_description)
-   
-         for (var i = 0; i < splitGuess.length; i++) {
-            const relevantWord = splitGuess[i]
-            console.log("relevantWord: " + relevantWord)
-            const locInDesc = props.split_description.indexOf(relevantWord)
-            console.log("locInDesc: " + locInDesc)
-   
-            if (locInDesc !== -1) {
-               // console.log("this item is in the description")
-               if (locInDesc === i) {
-                  //  console.log("guess index is correct, too (i is " + i + ")")
-                  currentGuessCombo.colors.push("#6aaa64")
-               } else {
-                  currentGuessCombo.colors.push("#c9b458")
-               }
+         key: guesses.length + 1,
+         text: guess,
+         semanticSimilarity: ss,
+         colors: [],
+      }
+
+      var splitGuess_noUpper = guess.split(" ")
+      var splitGuess = guess.toUpperCase().split(" ")
+      // console.log("splitGuess: " + splitGuess)
+      // console.log("props.split_description: " + props.split_description)
+
+      for (var i = 0; i < splitGuess.length; i++) {
+         const relevantWord = splitGuess[i]
+         console.log("relevantWord: " + relevantWord)
+         const locInDesc = props.split_description.indexOf(relevantWord)
+         console.log("locInDesc: " + locInDesc)
+
+         if (locInDesc !== -1) {
+            // console.log("this item is in the description")
+            if (locInDesc === i) {
+               //  console.log("guess index is correct, too (i is " + i + ")")
+               currentGuessCombo.colors.push("#6aaa64")
             } else {
-               currentGuessCombo.colors.push("#787c7e")
+               currentGuessCombo.colors.push("#c9b458")
             }
+         } else {
+            currentGuessCombo.colors.push("#787c7e")
          }
-   
-         // console.log("colors: " + currentGuessCombo.colors)
-   
-         var html = "<p>"
-         for (var i = 0; i < currentGuessCombo.colors.length; i++) {
-            html +=
-               '<span style="color: ' +
-               currentGuessCombo.colors[i] +
-               '">' +
-               splitGuess_noUpper[i] +
-               "</span>"
-            if (i < currentGuessCombo.colors.length - 1) {
-               html += " "
-            }
+      }
+
+      // console.log("colors: " + currentGuessCombo.colors)
+
+      var html = "<p>"
+      for (var i = 0; i < currentGuessCombo.colors.length; i++) {
+         html +=
+            '<span style="color: ' +
+            currentGuessCombo.colors[i] +
+            '">' +
+            splitGuess_noUpper[i] +
+            "</span>"
+         if (i < currentGuessCombo.colors.length - 1) {
+            html += " "
          }
-         html += "</p>"
-         currentGuessCombo.html = html
-   
-         setGuesses((guesses) => [...guesses, currentGuessCombo])
-   
-         // is this the right semantic similarity to compare to?
-         if (
-            guess.toUpperCase() === props.text_description.toUpperCase() ||
-            (!isNaN(ss) && Number(ss) === 1)
-         ) {
-            setLoading(false)
-            setSolved(true)
-            handleSolve()
-            return
-         }
-         setLoading(false)
+      }
+      html += "</p>"
+      currentGuessCombo.html = html
+
+      var newGuesses = guesses
+      newGuesses.push(currentGuessCombo)
+      setGuesses(newGuesses)
+
+      if (
+         guess.toUpperCase() === props.text_description.toUpperCase() ||
+         (!isNaN(ss) && Number(ss) === 1)
+      ) {
+         setSolved(true)
+         handleSolve()
+         updateLocalStorage(true)
          return
+      }
+      setLoading(false)
+      updateLocalStorage(false)
+      return
    }
 
    return (
@@ -273,10 +331,12 @@ export default function Home(props) {
                )}
                {statsVisible && <StatsOverlay />}
                {directionsVisible && (
-                  <DirectionsOverlay dismiss={() => {
-                     setOverlayVisible(false)
-                     handleCloseDirections()
-                  }} />
+                  <DirectionsOverlay
+                     dismiss={() => {
+                        setOverlayVisible(false)
+                        handleCloseDirections()
+                     }}
+                  />
                )}
             </div>
          )}

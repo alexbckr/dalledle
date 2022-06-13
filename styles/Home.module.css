@@ -139,10 +139,13 @@
   0% {
     transform: rotateX(0deg);
   }
-  45% {
+  35% {
     transform: rotateX(60deg);
   }
-  55% {
+  50% {
+    transform: rotateX(0deg);
+  }
+  65% {
     transform: rotateX(60deg);
   }
   100% {

@@ -11,13 +11,13 @@
 }
 
 .winOverlayContainer {
-  animation: 3s ease 0s normal forwards 1 fadein;
-  -webkit-animation: 3s ease 0s normal forwards 1 fadein;
+  animation: 2.5s ease 0s normal forwards 1 fadein;
+  -webkit-animation: 2.5s ease 0s normal forwards 1 fadein;
 }
 
 .statsOverlayContainer, .directionsOverlayContainer {
-  animation: 0.2s ease 0s normal forwards 1 fadein;
-  -webkit-animation: 0.2s ease 0s normal forwards 1 fadein;
+  animation: 0.1s ease 0s normal forwards 1 fadein;
+  -webkit-animation: 0.1s ease 0s normal forwards 1 fadein;
 }
 
 .winContainer, .statsContainer, .directionsContainer {
@@ -35,7 +35,7 @@
 
 .winContainer {
     animation: flip 0.8s ease-in-out;
-    animation-delay: 3.5s;
+    animation-delay: 3s;
 }
 
 .header {
@@ -103,10 +103,10 @@
        opacity: 1;
     }
     45% {
-      transform: rotateX(10deg);
+      transform: rotateX(15deg);
     }
     55% {
-      transform: rotateX(10deg);
+      transform: rotateX(15deg);
     }
     100% {
       transform: rotateX(0deg);
