@@ -45,6 +45,7 @@ export const getServerSideProps = async () => {
    image.initialState = initialState
    const sd = image.text_description.toUpperCase().split(" ")
    image.split_description = sd
+   image.dateStamp = isoDate
 
    return {
       props: image,
@@ -63,7 +64,7 @@ export default function Home(props) {
 
    // runs onload
    useEffect(() => {
-      var resetOnRefresh = false
+      var resetOnRefresh = true
       const dalledle_state = localStorage.getItem("dalledle_state")
       if (!dalledle_state || resetOnRefresh) {
          // no local storage found
@@ -74,32 +75,40 @@ export default function Home(props) {
          console.log("game status: ", parsed.gameStatus)
 
          // TODO: check if game state needs to be reset
-
-         if (parsed.gameStatus === "IN_PROGRESS") {
-            console.log("game in progress")
-            setOverlayVisible(false)
-            setDirectionsVisible(false)
-            setGuesses(parsed.guesses)
-         } else if (parsed.gameStatus === "SOLVED") {
-            console.log("game solved")
-            setGuesses(parsed.guesses)
-            handleSolve()
+         if (props.dateStamp !== parsed.dateStamp) {
+            newPuzzleResetState(parsed.lastCompleted, parsed.lastPlayed)
+         } else {
+            if (parsed.gameStatus === "IN_PROGRESS") {
+               console.log("game in progress")
+               setOverlayVisible(false)
+               setDirectionsVisible(false)
+               setGuesses(parsed.guesses)
+            } else if (parsed.gameStatus === "SOLVED") {
+               console.log("game solved")
+               setGuesses(parsed.guesses)
+               handleSolve()
+            }
          }
       }
    }, [])
 
-   function initiateLocalStorage() {
-      console.log("no local storage found")
+   function newPuzzleResetState(lastCompleted, lastPlayed) {
       var initialDalledleState = {
          gameStatus: "IN_PROGRESS",
          guesses: [],
-         lastCompletedTs: "",
-         lastPlayedTs: "",
+         lastCompletedTs: lastCompleted,
+         lastPlayedTs: lastPlayed,
       }
       localStorage.setItem(
          "dalledle_state",
          JSON.stringify(initialDalledleState)
       )
+   }
+
+   function initiateLocalStorage() {
+      console.log("no local storage found")
+      newPuzzleResetState("", "")
+
       var initialStatisticsState = {
          currentStreak: "",
          gamesPlayed: "",
@@ -122,6 +131,16 @@ export default function Home(props) {
       var parsed = JSON.parse(dalledle_state)
 
       parsed.lastPlayedTs = new Date().toISOString()
+     
+      var dateStamp = new Date()
+      var year = dateStamp.getFullYear()
+      var day = dateStamp.getDate()
+      var month = dateStamp.getMonth() + 1
+      day = day < 10 ? "0" + day : day
+      month = month < 10 ? "0" + month : month
+      var isoDate = year + "-" + month + "-" + day
+      parsed.dateStamp = isoDate
+      
       parsed.guesses = guesses
 
       if (isSolved) {
@@ -252,7 +271,7 @@ export default function Home(props) {
    //prereq: guess should string
    function getSemanticSimilarity_testing(guess, isValid) {
       // I didn't enter my cc for this token, so I'm fine with exposing it? is that ok?
-      var dev = false
+      var dev = true
       var token = dev ? "oops" : "1202e2ee98174fba9b340300b3855bc2"
 
       if (!isValid || guess === null || guess.toString().trim() === "") {
