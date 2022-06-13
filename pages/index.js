@@ -89,6 +89,7 @@ export default function Home(props) {
                console.log("game in progress")
                setOverlayVisible(false)
                setDirectionsVisible(false)
+               console.log("parsed guesses: ", parsed.guesses)
                setGuesses(parsed.guesses)
             } else if (parsed.gameStatus === "SOLVED") {
                console.log("game solved")
@@ -98,6 +99,17 @@ export default function Home(props) {
          }
       }
    }, [])
+
+   useEffect(() => {
+      if (guesses.length > 0) {
+         const dalledle_state = localStorage.getItem("dalledle_state")
+         if (dalledle_state) {
+            var parsed = JSON.parse(dalledle_state)
+            parsed.guesses = guesses
+            localStorage.setItem("dalledle_state", JSON.stringify(parsed))
+         }
+      }
+   }, [guesses])
 
    function newPuzzleResetState(lastCompleted, lastPlayed) {
       var initialDalledleState = {
@@ -131,8 +143,6 @@ export default function Home(props) {
    }
 
    function updateLocalStorage(isSolved, firstGuess) {
-      console.log("updating local storage")
-      console.log("guesses: ", guesses)
       const dalledle_state = localStorage.getItem("dalledle_state")
 
       var parsed = JSON.parse(dalledle_state)
@@ -140,10 +150,9 @@ export default function Home(props) {
       parsed.lastPlayedTs = new Date().toISOString()
       parsed.dateStamp = props.dateStamp
 
-      parsed.guesses = guesses
+      // guesses are updated in useEffect
 
       if (isSolved) {
-         console.log("game solved")
          parsed.gameStatus = "SOLVED"
          parsed.lastCompletedTs = new Date().toISOString()
       } else {
