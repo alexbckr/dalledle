@@ -8,7 +8,7 @@ export default function WinOverlay(props) {
         return "";
       }
       var date_array = props.date.split("-")
-      var isoDate = date_array[1] + "/" + date_array[2] + "/" + date_array[0]
+      var isoDate = Number(date_array[1]) + "/" + Number(date_array[2]) + "/" + date_array[0]
       return isoDate
    }
 
