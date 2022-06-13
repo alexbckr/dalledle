@@ -449,7 +449,7 @@ export default function Home(props) {
                      {display}
                   </div>
                   <div className={styles.inputSection}>
-                     <input className={styles.inputBox} id="guess"></input>
+                     <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" className={styles.inputBox} id="guess"></input>
                      <div
                         className={styles.enterButton}
                         id="vg"
