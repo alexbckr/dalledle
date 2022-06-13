@@ -75,6 +75,10 @@ export default function Home(props) {
          console.log("game status: ", parsed.gameStatus)
 
          // TODO: check if game state needs to be reset
+
+         console.log("props.datestamp (the date of the image: ", props.dateStamp)
+         console.log("parsed.datestamp (their last play: ", parsed.dateStamp)
+
          if (props.dateStamp !== parsed.dateStamp) {
             newPuzzleResetState(parsed.lastCompleted, parsed.lastPlayed)
          } else {
