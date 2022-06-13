@@ -4,6 +4,7 @@ import Header from "../components/Header"
 import WinOverlay from "../components/WinOverlay"
 import StatsOverlay from "../components/StatsOverlay"
 import DirectionsOverlay from "../components/DirectionsOverlay"
+import FAQOverlay from "../components/FAQOverlay"
 import { prisma } from "../lib/prisma.js"
 import { useState, useEffect } from "react"
 import parse from "html-react-parser"
@@ -60,6 +61,7 @@ export default function Home(props) {
    const [winVisible, setWinVisible] = useState(false)
    const [statsVisible, setStatsVisible] = useState(false)
    const [directionsVisible, setDirectionsVisible] = useState(true)
+   const [faqVisible, setFAQVisible] = useState(false)
    const [loading, setLoading] = useState(false)
 
    // runs onload
@@ -222,14 +224,16 @@ export default function Home(props) {
       document.getElementById("vg").disabled = true
       setStatsVisible(false)
       setDirectionsVisible(false)
-      setWinVisible(true)
+      setFAQVisible(false)
       setOverlayVisible(true)
+      setWinVisible(true)
    }
 
    function handleStatsClick() {
-      setOverlayVisible(true)
       setDirectionsVisible(false)
       setWinVisible(false)
+      setFAQVisible(false)
+      setOverlayVisible(true)
       setStatsVisible(true)
    }
 
@@ -238,6 +242,15 @@ export default function Home(props) {
       setWinVisible(false)
       setDirectionsVisible(true)
       setStatsVisible(false)
+      setFAQVisible(false)
+   }
+
+   function handleFAQClick() {
+      setWinVisible(false)
+      setStatsVisible(false)
+      setDirectionsVisible(false)
+      setFAQVisible(true)
+      setOverlayVisible(true)
    }
 
    function handleCloseDirections() {
@@ -366,7 +379,7 @@ export default function Home(props) {
       html += "</p>"
       currentGuessCombo.html = html
 
-      setGuesses(guesses => ([...guesses, currentGuessCombo]));
+      setGuesses((guesses) => [...guesses, currentGuessCombo])
 
       var firstGuess = guesses.length === 1 ? true : false
 
@@ -391,7 +404,7 @@ export default function Home(props) {
             <div
                className={styles.overlayContainer}
                onClick={() => {
-                  if (!winVisible) {
+                  if (!winVisible && !faqVisible) {
                      setOverlayVisible(false)
                   }
                }}
@@ -407,7 +420,15 @@ export default function Home(props) {
                      }}
                   />
                )}
-               {statsVisible && <StatsOverlay />}
+               {statsVisible && <StatsOverlay stats={JSON.parse(localStorage.getItem("dalledle_statistics"))}/>}
+               {faqVisible && (
+                  <FAQOverlay
+                     dismiss={() => {
+                        setOverlayVisible(false)
+                        setFAQVisible(false)
+                     }}
+                  />
+               )}
                {directionsVisible && (
                   <DirectionsOverlay
                      dismiss={() => {
@@ -428,6 +449,7 @@ export default function Home(props) {
             <Header
                handleStatsClick={handleStatsClick}
                handleDirectionsClick={handleDirectionsClick}
+               handleFAQClick={handleFAQClick}
             />
 
             <main
@@ -449,7 +471,14 @@ export default function Home(props) {
                      {display}
                   </div>
                   <div className={styles.inputSection}>
-                     <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" className={styles.inputBox} id="guess"></input>
+                     <input
+                        autocomplete="off"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        spellcheck="false"
+                        className={styles.inputBox}
+                        id="guess"
+                     ></input>
                      <div
                         className={styles.enterButton}
                         id="vg"

@@ -1,4 +1,4 @@
-.winOverlayContainer, .statsOverlayContainer, .directionsOverlayContainer {
+.winOverlayContainer, .statsOverlayContainer, .directionsOverlayContainer, .faqOverlayContainer {
   display: flex;
   height: 100vh;
   width: 100vw;
@@ -15,12 +15,12 @@
   -webkit-animation: 2.5s ease 0s normal forwards 1 fadein;
 }
 
-.statsOverlayContainer, .directionsOverlayContainer {
+.statsOverlayContainer, .directionsOverlayContainer, .faqOverlayContainer {
   animation: 0.1s ease 0s normal forwards 1 fadein;
   -webkit-animation: 0.1s ease 0s normal forwards 1 fadein;
 }
 
-.winContainer, .statsContainer, .directionsContainer {
+.winContainer, .statsContainer, .directionsContainer, .faqContainer {
     display: flex;
     flex-direction: column;
     background-color: white;
@@ -73,6 +73,10 @@
   font-size: 14px;
 }
 
+.faqContainer > p, .faqContainer > b, .statsContainer > p {
+  text-align: left;
+}
+
 .playButton {
   color: white;
   padding: .5rem 1rem;
@@ -88,8 +92,17 @@
   filter: brightness(0.8);
 }
 
+.faqContainer > p {
+  margin-top: 6px;
+  margin-bottom: 18px;
+}
+
+.stat > span {
+  color: var(--green);
+}
+
 @media (max-width: 550px) {
-    .winContainer, .statsContainer, .directionsContainer {
+    .winContainer, .statsContainer, .directionsContainer, .faqContainer {
         max-width: 90vw;
     }
 }

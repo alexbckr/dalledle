@@ -16,14 +16,23 @@
    font-weight: 900;
 }
 
-.navbarButton {
+.navbarButton, .dummyButton, .faqButton {
     margin-right: 30px;
     margin-left: 30px;
     font-size: 18px;
-    padding: .5rem 1rem;
+    padding: .5rem .8rem;
 }
 
-.navbarButton:hover {
+.faqButton, .dummyButton {
+    margin-left: 0!important;
+    margin-right: 0!important;
+}
+
+.dummyButton {
+    color: white;
+}
+
+.navbarButton:hover, .faqButton:hover {
     color: #ccc;
     cursor: pointer;
 }
@@ -32,5 +41,10 @@
     .navbarButton {
         margin-left: 10px;
         margin-right: 10px;
+    }
+
+    .navbarButton, .faqButton, .dummyButton {
+        font-size: 12px;
+        padding: .5rem .6rem;
     }
 }
