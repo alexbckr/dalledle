@@ -285,25 +285,27 @@ export default function Home(props) {
          redirect: "follow",
       }
 
-      fetch(
-         "https://api.dandelion.eu/datatxt/sim/v1/?text1=" +
-            text1 +
-            " &text2=" +
-            text2 +
-            "&lang=en&token=" +
-            token,
-         requestOptions
-      )
-         .then((response) => response.text())
-         .then((result) => {
-            console.log("result: ", result)
-            var parsed = JSON.parse(result)
-            completeGuessProcessing(parsed.similarity, guess)
-         })
-         .catch((error) => {
-            console.log("error in SS", error)
-            completeGuessProcessing(":(", guess)
-         })
+      completeGuessProcessing(":(", guess)
+
+      // fetch(
+      //    "https://api.dandelion.eu/datatxt/sim/v1/?text1=" +
+      //       text1 +
+      //       " &text2=" +
+      //       text2 +
+      //       "&lang=en&token=" +
+      //       token,
+      //    requestOptions
+      // )
+      //    .then((response) => response.text())
+      //    .then((result) => {
+      //       console.log("result: ", result)
+      //       var parsed = JSON.parse(result)
+      //       completeGuessProcessing(parsed.similarity, guess)
+      //    })
+      //    .catch((error) => {
+      //       console.log("error in SS", error)
+      //       completeGuessProcessing(":(", guess)
+      //    })
    }
 
    function completeGuessProcessing(ss, guess) {
@@ -386,7 +388,11 @@ export default function Home(props) {
                }}
             >
                {winVisible && (
-                  <WinOverlay guessNum={guesses.length} imageUrl={props.url} />
+                  <WinOverlay guessNum={guesses.length} imageUrl={props.url} dismiss={() => {
+                     setOverlayVisible(false)
+                     setWinVisible(false)
+                  }
+                  } />
                )}
                {statsVisible && <StatsOverlay />}
                {directionsVisible && (

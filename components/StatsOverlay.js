@@ -17,7 +17,7 @@ export default function StatsOverlay(props) {
             <h1 className={styles.header}>Statistics</h1>
             <p>Games Played: {stats.gamesPlayed || 0}</p>
             <p>Wins: {stats.gamesWon || 0}</p>
-            <p>Win %: {stats.winPercentage || 0}% </p>
+            <p>Win %: {stats.gamesPlayed === 0 ? 0 : (Number(stats.gamesWon) / Number(stats.gamesPlayed))}% </p>
             <p>Current Streak: {stats.currentStreak || 0}</p>
             <p>Best Streak: {stats.maxStreak || 0}</p>
             </div>

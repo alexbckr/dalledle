@@ -13,8 +13,8 @@ export default function WinOverlay(props) {
    }
 
    return (
-      <div className={styles.winOverlayContainer}>
-         <div className={styles.winContainer}>
+      <div className={styles.winOverlayContainer} onClick={() => props.dismiss()}>
+         <div className={styles.winContainer} onClick={() => {}}>
             <h1 className={styles.header}>Woooo!</h1>
             <p>
                You solved DALL-Edle on {getDate()}. It took{" "}
