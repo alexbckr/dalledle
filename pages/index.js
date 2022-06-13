@@ -269,23 +269,25 @@ export default function Home(props) {
 
    //prereq: guess should string
    function getSemanticSimilarity_testing(guess, isValid) {
-      // I didn't enter my cc for this token, so I'm fine with exposing it? is that ok?
+      // I didn't enter my cc for dandelion token, so I'm fine with exposing it? is that ok?
       var dev = true
       var token = dev ? "oops" : "1202e2ee98174fba9b340300b3855bc2"
 
       if (!isValid || guess === null || guess.toString().trim() === "") {
-         return completeGuessProcessing(":(", guess)
-      }
-
-      const text1 = encodeURIComponent(guess.trim())
-      const text2 = encodeURIComponent(props.text_description.trim())
-
-      var requestOptions = {
-         method: "GET",
-         redirect: "follow",
+         completeGuessProcessing(":(", guess)
+         return
       }
 
       completeGuessProcessing(":(", guess)
+      return
+
+      // const text1 = encodeURIComponent(guess.trim())
+      // const text2 = encodeURIComponent(props.text_description.trim())
+
+      // var requestOptions = {
+      //    method: "GET",
+      //    redirect: "follow",
+      // }
 
       // fetch(
       //    "https://api.dandelion.eu/datatxt/sim/v1/?text1=" +
@@ -355,9 +357,7 @@ export default function Home(props) {
       html += "</p>"
       currentGuessCombo.html = html
 
-      var newGuesses = guesses
-      newGuesses.push(currentGuessCombo)
-      setGuesses(newGuesses)
+      setGuesses(guesses => ([...guesses, currentGuessCombo]));
 
       var firstGuess = guesses.length === 1 ? true : false
 
