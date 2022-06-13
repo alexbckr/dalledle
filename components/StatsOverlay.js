@@ -5,7 +5,6 @@ export default function StatsOverlay(props) {
 
     const [stats, setStats] = useState(props.stats)
 
-
     return (
         <div className={styles.statsOverlayContainer}>
             <div className={styles.statsContainer}>
