@@ -26,7 +26,10 @@ export default function WinOverlay(props) {
             <img src={props.imageUrl} className={styles.image}></img>
             <div
                className={styles.shareButton}
-               onClick={() => navigator.clipboard.writeText("I solved the DALL-Edle 6/12/2022 puzzle in " + (props.guessNum) + (props.guessNum === 1 ? " guess." : " guesses.") + " http://dalledle.com")}
+               onClick={() => {
+                navigator.clipboard.writeText("I solved the DALL-Edle 6/12/2022 puzzle in " + (props.guessNum) + (props.guessNum === 1 ? " guess." : " guesses.") + " http://dalledle.com")
+                alert("Copied to clipboard!")
+                }}
             >
                Share
             </div>

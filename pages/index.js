@@ -76,7 +76,10 @@ export default function Home(props) {
 
          // TODO: check if game state needs to be reset
 
-         console.log("props.datestamp (the date of the image: ", props.dateStamp)
+         console.log(
+            "props.datestamp (the date of the image: ",
+            props.dateStamp
+         )
          console.log("parsed.datestamp (their last play): ", parsed.dateStamp)
 
          if (props.dateStamp !== parsed.dateStamp) {
@@ -136,7 +139,7 @@ export default function Home(props) {
 
       parsed.lastPlayedTs = new Date().toISOString()
       parsed.dateStamp = props.dateStamp
-      
+
       parsed.guesses = guesses
 
       if (isSolved) {
@@ -376,7 +379,11 @@ export default function Home(props) {
          {overlayVisible && (
             <div
                className={styles.overlayContainer}
-               onClick={() => setOverlayVisible(false)}
+               onClick={() => {
+                  if (!winVisible) {
+                     setOverlayVisible(false)
+                  }
+               }}
             >
                {winVisible && (
                   <WinOverlay guessNum={guesses.length} imageUrl={props.url} />
