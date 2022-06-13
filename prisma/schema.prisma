@@ -27,3 +27,8 @@ model stat {
   plays            Int @default(0)
   solves           Int @default(0)
 }
+
+model stat_book {
+  id               String @id @default(cuid())
+  unique_users     Int @default(0)
+}

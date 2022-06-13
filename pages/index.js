@@ -145,6 +145,20 @@ export default function Home(props) {
       }
     }
 
+    const incrementUniqueUsers = async () => {
+      console.log("inc unique users")
+      const body = {}
+      try {
+        await fetch("/api/increment_unique_users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
    function newPuzzleResetState(lastCompleted, lastPlayed) {
       var initialDalledleState = {
          gameStatus: "IN_PROGRESS",
@@ -161,7 +175,7 @@ export default function Home(props) {
    function initiateLocalStorage() {
       console.log("no local storage found")
       newPuzzleResetState("", "")
-
+      incrementUniqueUsers()
       var initialStatisticsState = {
          currentStreak: "",
          gamesPlayed: "",
