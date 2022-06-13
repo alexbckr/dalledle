@@ -76,7 +76,7 @@ export default function Home(props) {
       } else {
          console.log("local storage found")
          var parsed = JSON.parse(dalledle_state)
-         console.log("game status: ", parsed.gameStatus)
+         console.log("game status: ",parsed.gameStatus)
 
          // TODO: check if game state needs to be reset
 
@@ -386,10 +386,10 @@ export default function Home(props) {
    }
 
    function completeGuessProcessing(ss, guess) {
-      gtag("event", "guess_submitted", {
-         event_category: props.dateStamp,
-         event_label: guess,
-      })
+      // gtag("event", "guess_submitted", {
+      //    event_category: props.dateStamp,
+      //    event_label: guess,
+      // })
 
       if (!isNaN(ss)) {
          ss = "" + Number(ss).toFixed(3)
@@ -452,10 +452,10 @@ export default function Home(props) {
          setSolved(true)
          handleSolve()
          setLoading(false)
-         gtag("event", "puzzle_solved", {
-            event_category: props.dateStamp,
-            event_label: new Date().toLocaleString,
-         })
+         // gtag("event", "puzzle_solved", {
+         //    event_category: props.dateStamp,
+         //    event_label: new Date().toLocaleString,
+         // })
          updateLocalStorage(true, firstGuess)
          return
       }
