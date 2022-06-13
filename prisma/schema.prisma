@@ -20,3 +20,10 @@ model image {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @default(now())
 }
+
+model stat {
+  id               String @id @default(cuid())
+  date             String @default ("") @unique
+  plays            Int @default(0)
+  solves           Int @default(0)
+}

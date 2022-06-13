@@ -113,6 +113,38 @@ export default function Home(props) {
       }
    }, [guesses])
 
+   const incrementPlays = async () => {
+      const body = { date: props.dateStamp }
+  
+      console.log("incrementing where body datestamp is ", props.dateStamp)
+
+      try {
+        await fetch("/api/increment_plays", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    const incrementSolves = async () => {
+      const body = { date: props.dateStamp }
+
+      console.log("incrementing where body datestamp is ", props.dateStamp)
+  
+      try {
+        await fetch("/api/increment_solves", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
    function newPuzzleResetState(lastCompleted, lastPlayed) {
       var initialDalledleState = {
          gameStatus: "IN_PROGRESS",
@@ -180,6 +212,8 @@ export default function Home(props) {
                (Number(parsed_statistics.gamesWon) /
                   Number(parsed_statistics.gamesPlayed)) *
                100
+            //prisma
+            incrementSolves()
          }
          if (firstGuess) {
             parsed_statistics.gamesPlayed =
@@ -381,7 +415,12 @@ export default function Home(props) {
 
       setGuesses((guesses) => [...guesses, currentGuessCombo])
 
-      var firstGuess = guesses.length === 1 ? true : false
+      var firstGuess = guesses.length <= 1 ? true : false
+
+      if (firstGuess) {
+         //prisma
+         incrementPlays()
+      }
 
       if (
          guess.toUpperCase() === props.text_description.toUpperCase() ||
