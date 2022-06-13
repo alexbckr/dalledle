@@ -28,6 +28,12 @@ export default function WinOverlay(props) {
                className={styles.shareButton}
                onClick={() => {
                 navigator.clipboard.writeText("I solved the DALL-Edle " + getDate() + " puzzle in " + (props.guessNum) + (props.guessNum === 1 ? " guess." : " guesses.") + " http://dalledle.com")
+                .then(() => {
+                  alert("Copied to clipboard!");
+                })
+                .catch(() => {
+                  alert("Couldn't copy. Not sure why :(");
+                });
                 }}
             >
                Share
