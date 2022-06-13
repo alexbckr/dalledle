@@ -135,15 +135,7 @@ export default function Home(props) {
       var parsed = JSON.parse(dalledle_state)
 
       parsed.lastPlayedTs = new Date().toISOString()
-     
-      var dateStamp = new Date()
-      var year = dateStamp.getFullYear()
-      var day = dateStamp.getDate()
-      var month = dateStamp.getMonth() + 1
-      day = day < 10 ? "0" + day : day
-      month = month < 10 ? "0" + month : month
-      var isoDate = year + "-" + month + "-" + day
-      parsed.dateStamp = isoDate
+      parsed.dateStamp = props.dateStamp
       
       parsed.guesses = guesses
 

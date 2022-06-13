@@ -13,7 +13,8 @@ export default function WinOverlay(props) {
    }
 
    function CopyToClipboard(text) {
-    console.log("hello world")
+        navigator.clipboard.writeText(text);
+        alert("Copied to clipbaord!")
    }
 
    return (
@@ -29,7 +30,7 @@ export default function WinOverlay(props) {
             <img src={props.imageUrl} className={styles.image}></img>
             <div
                className={styles.shareButton}
-               onClick={() => CopyToClipboard("text")}
+               onClick={() => CopyToClipboard("hello world copied! alex b")}
             >
                Share
             </div>
