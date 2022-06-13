@@ -61,6 +61,11 @@ export default function Home(props) {
    const [directionsVisible, setDirectionsVisible] = useState(true)
    const [loading, setLoading] = useState(false)
 
+   useEffect(() => {
+      console.log("useEffect running")
+
+   }, [guesses, solved])
+
    function handleGuess(guess) {
       for (var i = 0; i < guesses.length; i++) {
          console.log("guesses[" + i + "]: " + guesses[i].text)
@@ -80,9 +85,9 @@ export default function Home(props) {
 
       if (guess.toString().trim() !== "" && guess.split(" ").length > 2) {
          // run semantic sim function (coming soon ig)
-         getSemanticSimilarity_testing(guess.toString().trim())
+         getSemanticSimilarity_testing(guess.toString().trim(), true)
       } else {
-         getSemanticSimilarity_testing(":(")
+         getSemanticSimilarity_testing(guess.toString().trim(), false)
       }
    }
 
@@ -112,8 +117,12 @@ export default function Home(props) {
       setStatsVisible(false)
    }
 
+   function handleCloseDirections() {
+      document.getElementById("guess").focus()
+   }
+
    // prereq: guess should be string
-   function getSemanticSimilarity(guess) {
+   function getSemanticSimilarity(guess, isValid) {
       // this is what the API returns when two texts match
       const perfect = 200000
 
@@ -145,12 +154,12 @@ export default function Home(props) {
    }
 
    //prereq: guess should string
-   function getSemanticSimilarity_testing(guess) {
+   function getSemanticSimilarity_testing(guess, isValid) {
 
       // I didn't enter my cc for this token, so I'm fine with exposing it? is that ok?
       var token = "1202e2ee98174fba9b340300b3855bc2"
 
-      if (guess == ":(" || guess === null || guess.toString().trim() === "") {
+      if (!isValid || guess === null || guess.toString().trim() === "") {
          return completeGuessProcessing(":(", guess)
       }
 
@@ -183,7 +192,10 @@ export default function Home(props) {
    }
 
    function completeGuessProcessing(ss, guess) {
-      console.log("semantic similarity: " + ss)
+
+      if (!isNaN(ss)) {
+         ss = "" + Number(ss).toFixed(3)
+      }
 
       let currentGuessCombo = {
             key: guesses.length + 1,
@@ -261,7 +273,10 @@ export default function Home(props) {
                )}
                {statsVisible && <StatsOverlay />}
                {directionsVisible && (
-                  <DirectionsOverlay dismiss={() => setOverlayVisible(false)} />
+                  <DirectionsOverlay dismiss={() => {
+                     setOverlayVisible(false)
+                     handleCloseDirections()
+                  }} />
                )}
             </div>
          )}
