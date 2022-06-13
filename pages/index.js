@@ -61,25 +61,26 @@ export default function Home(props) {
    const [directionsVisible, setDirectionsVisible] = useState(true)
    const [loading, setLoading] = useState(false)
 
-
    // runs onload
    useEffect(() => {
-      console.log("running useEffect")
+      var resetOnRefresh = false
       const dalledle_state = localStorage.getItem("dalledle_state")
-      if (!dalledle_state) {
+      if (!dalledle_state || resetOnRefresh) {
          // no local storage found
          initiateLocalStorage()
       } else {
          console.log("local storage found")
          var parsed = JSON.parse(dalledle_state)
          console.log("game status: ", parsed.gameStatus)
+
+         // TODO: check if game state needs to be reset
+
          if (parsed.gameStatus === "IN_PROGRESS") {
             console.log("game in progress")
             setOverlayVisible(false)
             setDirectionsVisible(false)
             setGuesses(parsed.guesses)
-         }
-         else if (parsed.gameStatus === "SOLVED") {
+         } else if (parsed.gameStatus === "SOLVED") {
             console.log("game solved")
             setGuesses(parsed.guesses)
             handleSolve()
@@ -95,38 +96,77 @@ export default function Home(props) {
          lastCompletedTs: "",
          lastPlayedTs: "",
       }
-      localStorage.setItem("dalledle_state", JSON.stringify(initialDalledleState))
+      localStorage.setItem(
+         "dalledle_state",
+         JSON.stringify(initialDalledleState)
+      )
+      var initialStatisticsState = {
+         currentStreak: "",
+         gamesPlayed: "",
+         gamesWon: "",
+         guesses: [],
+         maxStreak: "",
+         winPercentage: "",
+      }
+      localStorage.setItem(
+         "dalledle_statistics",
+         JSON.stringify(initialStatisticsState)
+      )
    }
 
-   function updateLocalStorage(isSolved) {
+   function updateLocalStorage(isSolved, firstGuess) {
       console.log("updating local storage")
+      console.log("guesses: ", guesses)
       const dalledle_state = localStorage.getItem("dalledle_state")
-      if (!dalledle_state) {
-         // no local storage found (just in case)
-         initiateLocalStorage()
+
+      var parsed = JSON.parse(dalledle_state)
+
+      parsed.lastPlayedTs = new Date().toISOString()
+      parsed.guesses = guesses
+
+      if (isSolved) {
+         console.log("game solved")
+         parsed.gameStatus = "SOLVED"
+         parsed.lastCompletedTs = new Date().toISOString()
       } else {
-         // we should be here
-         console.log("local storage found")
-         var parsed = JSON.parse(dalledle_state)
-         
-         parsed.guesses = guesses
+         parsed.gameStatus = "IN_PROGRESS"
+      }
+
+      localStorage.setItem("dalledle_state", JSON.stringify(parsed))
+
+      if (isSolved || firstGuess) {
+         const dalledle_statistics = localStorage.getItem("dalledle_statistics")
+         var parsed_statistics = JSON.parse(dalledle_statistics)
          if (isSolved) {
-            console.log("game solved")
-            parsed.gameStatus = "SOLVED"
-            parsed.lastCompletedTs = new Date().toISOString()
-         } else {
-            parsed.gameStatus = "IN_PROGRESS"
+            parsed_statistics.gamesWon = (parsed.gamesWon || 0) + 1
+            parsed_statistics.currentStreak = (parsed.currentStreak || 0) + 1
+            if (
+               isNaN(parsed_statistics.maxStreak) ||
+               Number(parsed_statistics.currentStreak) >
+                  Number(parsed_statistics.maxStreak)
+            ) {
+               parsed_statistics.maxStreak = parsed_statistics.currentStreak
+            }
+            parsed_statistics.winPercentage =
+               (Number(parsed_statistics.gamesWon) /
+                  Number(parsed_statistics.gamesPlayed)) *
+               100
+         }
+         if (firstGuess) {
+            parsed_statistics.gamesPlayed =
+               (parsed_statistics.gamesPlayed === ""
+                  ? 0
+                  : Number(parsed_statistics.gamesPlayed)) + 1
          }
 
-         console.log("updating local storage:", parsed)
-         localStorage.setItem("dalledle_state", JSON.stringify(parsed))
+         localStorage.setItem(
+            "dalledle_statistics",
+            JSON.stringify(parsed_statistics)
+         )
       }
    }
 
    function handleGuess(guess) {
-      for (var i = 0; i < guesses.length; i++) {
-         console.log("guesses[" + i + "]: " + guesses[i].text)
-      }
       setLoading(true)
       // some random stuff you could catch
       if (
@@ -212,7 +252,7 @@ export default function Home(props) {
    //prereq: guess should string
    function getSemanticSimilarity_testing(guess, isValid) {
       // I didn't enter my cc for this token, so I'm fine with exposing it? is that ok?
-      var dev = false
+      var dev = true
       var token = dev ? "oops" : "1202e2ee98174fba9b340300b3855bc2"
 
       if (!isValid || guess === null || guess.toString().trim() === "") {
@@ -262,8 +302,6 @@ export default function Home(props) {
 
       var splitGuess_noUpper = guess.split(" ")
       var splitGuess = guess.toUpperCase().split(" ")
-      // console.log("splitGuess: " + splitGuess)
-      // console.log("props.split_description: " + props.split_description)
 
       for (var i = 0; i < splitGuess.length; i++) {
          const relevantWord = splitGuess[i]
@@ -272,9 +310,7 @@ export default function Home(props) {
          console.log("locInDesc: " + locInDesc)
 
          if (locInDesc !== -1) {
-            // console.log("this item is in the description")
             if (locInDesc === i) {
-               //  console.log("guess index is correct, too (i is " + i + ")")
                currentGuessCombo.colors.push("#6aaa64")
             } else {
                currentGuessCombo.colors.push("#c9b458")
@@ -283,8 +319,6 @@ export default function Home(props) {
             currentGuessCombo.colors.push("#787c7e")
          }
       }
-
-      // console.log("colors: " + currentGuessCombo.colors)
 
       var html = "<p>"
       for (var i = 0; i < currentGuessCombo.colors.length; i++) {
@@ -305,17 +339,20 @@ export default function Home(props) {
       newGuesses.push(currentGuessCombo)
       setGuesses(newGuesses)
 
+      var firstGuess = guesses.length === 1 ? true : false
+
       if (
          guess.toUpperCase() === props.text_description.toUpperCase() ||
          (!isNaN(ss) && Number(ss) === 1)
       ) {
          setSolved(true)
          handleSolve()
-         updateLocalStorage(true)
+         setLoading(false)
+         updateLocalStorage(true, firstGuess)
          return
       }
       setLoading(false)
-      updateLocalStorage(false)
+      updateLocalStorage(false, firstGuess)
       return
    }
 
