@@ -12,6 +12,10 @@ export default function WinOverlay(props) {
       return isoDate
    }
 
+   function CopyToClipboard(text) {
+    console.log("hello world")
+   }
+
    return (
       <div className={styles.winOverlayContainer}>
          <div className={styles.winContainer}>
