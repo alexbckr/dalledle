@@ -113,6 +113,10 @@
     }
 }
 
+.watermark {
+  color: #ccc;
+}
+
 @keyframes fadein{
   0%{opacity:0}
   80%{opacity:0}

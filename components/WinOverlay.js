@@ -12,9 +12,10 @@ export default function WinOverlay(props) {
       return isoDate
    }
 
-   function CopyToClipboard(text) {
-        navigator.clipboard.writeText(text);
-        alert("Copied to clipbaord!")
+   function CopyToClipboard() {
+        var text = "I solved the DALL-Edle 6/12/2022 puzzle in " + (props.guessNum) + (props.guessNum === 1 ? " guess." : " guesses.") + " http://dalledle.com"
+        navigator.clipboard.writeText(text.toString());
+        alert("Copied to clipboard!")
    }
 
    return (
@@ -27,10 +28,11 @@ export default function WinOverlay(props) {
                   " " +
                   (props.guessNum === 1 ? "guess." : "guesses.")}
             </p>
+            <p className={styles.watermark}>dalledle.com</p>
             <img src={props.imageUrl} className={styles.image}></img>
             <div
                className={styles.shareButton}
-               onClick={() => CopyToClipboard("hello world copied! alex b")}
+               onClick={() => CopyToClipboard()}
             >
                Share
             </div>
