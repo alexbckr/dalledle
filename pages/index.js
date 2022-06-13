@@ -64,7 +64,7 @@ export default function Home(props) {
 
    // runs onload
    useEffect(() => {
-      var resetOnRefresh = true
+      var resetOnRefresh = false
       const dalledle_state = localStorage.getItem("dalledle_state")
       if (!dalledle_state || resetOnRefresh) {
          // no local storage found
@@ -444,9 +444,9 @@ export default function Home(props) {
                            <tr>
                               <th className={styles.tableGuessNum}>#</th>
                               <th className={styles.tableText}>Text</th>
-                              <th className={styles.tableSemanticSimilarity}>
+                              {/* <th className={styles.tableSemanticSimilarity}>
                                  SS (?)
-                              </th>
+                              </th> */}
                            </tr>
                         </thead>
                         <tbody>
@@ -459,13 +459,13 @@ export default function Home(props) {
                                     <td className={styles.tableText}>
                                        {parse(guess.html)}
                                     </td>
-                                    <td
+                                    {/* <td
                                        className={
                                           styles.tableSemanticSimilarityTable
                                        }
                                     >
                                        {guess.semanticSimilarity}
-                                    </td>
+                                    </td> */}
                                  </tr>
                               ))
                               .reverse()}
