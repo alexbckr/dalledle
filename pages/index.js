@@ -117,49 +117,49 @@ export default function Home(props) {
 
    const incrementPlays = async () => {
       const body = { date: props.dateStamp }
-  
+
       console.log("incrementing where body datestamp is ", props.dateStamp)
 
       try {
-        await fetch("/api/increment_plays", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
+         await fetch("/api/increment_plays", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+         })
       } catch (error) {
-        console.error(error);
+         console.error(error)
       }
-    }
+   }
 
-    const incrementSolves = async () => {
+   const incrementSolves = async () => {
       const body = { date: props.dateStamp }
 
       console.log("incrementing where body datestamp is ", props.dateStamp)
-  
-      try {
-        await fetch("/api/increment_solves", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    }
 
-    const incrementUniqueUsers = async () => {
+      try {
+         await fetch("/api/increment_solves", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+         })
+      } catch (error) {
+         console.error(error)
+      }
+   }
+
+   const incrementUniqueUsers = async () => {
       console.log("inc unique users")
       const body = {}
       try {
-        await fetch("/api/increment_unique_users", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
+         await fetch("/api/increment_unique_users", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+         })
       } catch (error) {
-        console.error(error);
+         console.error(error)
       }
-    }
+   }
 
    function newPuzzleResetState(lastCompleted, lastPlayed) {
       var initialDalledleState = {
@@ -232,7 +232,9 @@ export default function Home(props) {
             incrementSolves()
          }
          if (firstGuess) {
-            console.log("this was the first guess on this date. incrementing games played")
+            console.log(
+               "this was the first guess on this date. incrementing games played"
+            )
             parsed_statistics.gamesPlayed =
                (parsed_statistics.gamesPlayed === ""
                   ? 0
@@ -384,10 +386,9 @@ export default function Home(props) {
    }
 
    function completeGuessProcessing(ss, guess) {
-      gtag.event({
-         action: 'guess_submitted',
-         category: props.dateStamp,
-         label: guess,
+      gtag("event", "guess_submitted", {
+         event_category: props.dateStamp,
+         event_label: guess,
       })
 
       if (!isNaN(ss)) {
@@ -451,10 +452,9 @@ export default function Home(props) {
          setSolved(true)
          handleSolve()
          setLoading(false)
-         gtag.event({
-            action: 'puzzle_solved',
-            category: props.dateStamp,
-            label: new Date().toLocaleString,
+         gtag("event", "puzzle_solved", {
+            event_category: props.dateStamp,
+            event_label: new Date().toLocaleString,
          })
          updateLocalStorage(true, firstGuess)
          return
@@ -486,7 +486,13 @@ export default function Home(props) {
                      }}
                   />
                )}
-               {statsVisible && <StatsOverlay stats={JSON.parse(localStorage.getItem("dalledle_statistics"))}/>}
+               {statsVisible && (
+                  <StatsOverlay
+                     stats={JSON.parse(
+                        localStorage.getItem("dalledle_statistics")
+                     )}
+                  />
+               )}
                {faqVisible && (
                   <FAQOverlay
                      dismiss={() => {
