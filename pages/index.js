@@ -10,6 +10,8 @@ import { useState, useEffect } from "react"
 import parse from "html-react-parser"
 import * as gtag from "../lib/gtag"
 
+const prod = process.env.NODE_ENV === "production"
+
 export const getServerSideProps = async () => {
    var isoDate = new Date().toISOString().split("T")[0]
    // var isoDate = "2022-06-16"
@@ -60,7 +62,9 @@ export default function Home(props) {
 
    // runs onload
    useEffect(() => {
-      gtag.pageview("/")
+      console.log("PROD IS ", prod)
+      console.log("this is the new isodate: " + props.dateStamp)
+      if (prod) { gtag.pageview("/") }
       // both should be false in prod
       var resetStateOnRefresh = false
       var resetStatsOnRefresh = false
@@ -262,7 +266,7 @@ export default function Home(props) {
                   Number(parsed_statistics.gamesPlayed)) *
                100
             //prisma
-            incrementSolves()
+            if (prod) { incrementSolves() }
          }
 
          localStorage.setItem(
@@ -466,7 +470,7 @@ export default function Home(props) {
       var firstGuess = currentGuessCombo.key <= 1 ? true : false
 
       if (firstGuess) {
-         incrementPlays()
+         if (prod) { incrementPlays() }
       }
 
       if (
