@@ -19,7 +19,6 @@ export const getServerSideProps = async () => {
    day = day < 10 ? "0" + day : day
    month = month < 10 ? "0" + month : month
 
-   // var isoDate = "2022-06-14"
    var isoDate = year + "-" + month + "-" + day
 
    const image = await prisma.image.findUnique({
@@ -78,29 +77,45 @@ export default function Home(props) {
          initiateLocalStorage()
       } else {
          console.log("local storage found")
-         var parsed = JSON.parse(dalledle_state)
-         console.log("game status: ", parsed.gameStatus)
-
-         // TODO: check if game state needs to be reset
+         var parsed_state = JSON.parse(dalledle_state)
+         console.log("game status: ", parsed_state.gameStatus)
 
          console.log(
-            "props.datestamp (the date of the image: ",
+            "props.datestamp (the date of the image): ",
             props.dateStamp
          )
-         console.log("parsed.datestamp (their last play): ", parsed.dateStamp)
+         console.log("parsed.datestamp (their last play): ", parsed_state.dateStamp)
 
-         if (props.dateStamp !== parsed.dateStamp || resetStateOnRefresh) {
-            newPuzzleResetState(parsed.lastCompletedTs, parsed.lastPlayedTs)
-         } else {
-            if (parsed.gameStatus === "IN_PROGRESS") {
+         // if the date of the image is different from the date of the last play
+         if (props.dateStamp !== parsed_state.dateStamp || resetStateOnRefresh) {
+            // new day, haven't played yet
+            newPuzzleResetState(parsed_state.lastCompletedTs, parsed_state.lastPlayedTs)
+            // reset streak?
+            let dateLastSolved = new Date(parsed_state.lastCompletedTs)
+            let dateToday = new Date(props.dateStamp)
+            let timeInMilisec = dateToday - dateLastSolved;
+            let daysBetweenDates = Math.ceil(timeInMilisec / (1000 * 60 * 60 * 24));
+
+            console.log("date last solved: ", dateLastSolved)
+            console.log("date today: ", dateToday)
+            console.log("days between dates: ", daysBetweenDates)
+
+            if (daysBetweenDates > 1) {
+               console.log("reset streak")
+               resetCurrentStreak()
+            }
+         }
+         // otherwise, we're at the same date as last play (the date has not changed)
+         else {
+            if (parsed_state.gameStatus === "IN_PROGRESS") {
                console.log("game in progress")
                setOverlayVisible(false)
                setDirectionsVisible(false)
-               console.log("parsed guesses: ", parsed.guesses)
-               setGuesses(parsed.guesses)
-            } else if (parsed.gameStatus === "SOLVED") {
+               console.log("parsed guesses: ", parsed_state.guesses)
+               setGuesses(parsed_state.guesses)
+            } else if (parsed_state.gameStatus === "SOLVED") {
                console.log("game solved")
-               setGuesses(parsed.guesses)
+               setGuesses(parsed_state.guesses)
                handleSolve()
             }
          }
@@ -195,6 +210,16 @@ export default function Home(props) {
       )
    }
 
+   function resetCurrentStreak() {
+      var dalledle_statistics = localStorage.getItem("dalledle_statistics")
+      
+      if (dalledle_statistics) {
+         var parsed_statistics = JSON.parse(dalledle_statistics)
+         parsed_statistics.currentStreak = 0
+         localStorage.setItem("dalledle_statistics", JSON.stringify(parsed_statistics))
+      }
+   }
+
    function updateLocalStorage(isSolved, firstGuess) {
       const dalledle_state = localStorage.getItem("dalledle_state")
 
@@ -217,6 +242,15 @@ export default function Home(props) {
       if (isSolved || firstGuess) {
          const dalledle_statistics = localStorage.getItem("dalledle_statistics")
          var parsed_statistics = JSON.parse(dalledle_statistics)
+         if (firstGuess) {
+            console.log(
+               "this was the first guess on this date. incrementing games played"
+            )
+            parsed_statistics.gamesPlayed =
+               (parsed_statistics.gamesPlayed === ""
+                  ? 0
+                  : Number(parsed_statistics.gamesPlayed)) + 1
+         }
          if (isSolved) {
             parsed_statistics.gamesWon =
                (isNaN(parsed_statistics.gamesWon) ? 0 : Number(parsed_statistics.gamesWon)) + 1
@@ -238,15 +272,6 @@ export default function Home(props) {
                100
             //prisma
             incrementSolves()
-         }
-         if (firstGuess) {
-            console.log(
-               "this was the first guess on this date. incrementing games played"
-            )
-            parsed_statistics.gamesPlayed =
-               (parsed_statistics.gamesPlayed === ""
-                  ? 0
-                  : Number(parsed_statistics.gamesPlayed)) + 1
          }
 
          localStorage.setItem(
