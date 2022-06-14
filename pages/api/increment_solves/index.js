@@ -4,7 +4,7 @@ import { prisma } from '../../../lib/prisma.js';
 export default async function handle(req, res) {
   const date = req.body.date;
 
-  const stat = await prisma.stat.update({
+  const stat = await prisma.image.update({
     where: { date: date },
     data: {
         solves: {increment: 1}
