@@ -23,14 +23,9 @@ model image {
   solves            Int @default(0)
 }
 
-model stat {
-  id               String @id @default(cuid())
-  date             String @default ("") @unique
-  plays            Int @default(0)
-  solves           Int @default(0)
-}
-
 model stat_book {
   id               String @id @default(cuid())
   unique_users     Int @default(0)
+  total_plays      Int @default(0)
+  total_solves     Int @default(0)
 }
