@@ -11,16 +11,8 @@ import parse from "html-react-parser"
 import * as gtag from "../lib/gtag"
 
 export const getServerSideProps = async () => {
-   var date = new Date()
-   var year = date.getFullYear()
-   var day = date.getDate()
-   var month = date.getMonth() + 1
-
-   day = day < 10 ? "0" + day : day
-   month = month < 10 ? "0" + month : month
-
-   var isoDate = year + "-" + month + "-" + day
-   isoDate = new Date().toISOString().split("T")[0]
+   var isoDate = new Date().toISOString().split("T")[0]
+   // var isoDate = "2022-06-16"
 
    const image = await prisma.image.findUnique({
       where: {
@@ -244,9 +236,7 @@ export default function Home(props) {
          const dalledle_statistics = localStorage.getItem("dalledle_statistics")
          var parsed_statistics = JSON.parse(dalledle_statistics)
          if (firstGuess) {
-            console.log(
-               "this was the first guess on this date. incrementing games played"
-            )
+            // incrementing games played
             parsed_statistics.gamesPlayed =
                (parsed_statistics.gamesPlayed === ""
                   ? 0
