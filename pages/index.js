@@ -62,9 +62,9 @@ export default function Home(props) {
 
    // runs onload
    useEffect(() => {
-      console.log("PROD IS ", prod)
-      console.log("this is the new isodate: " + props.dateStamp)
-      if (prod) { gtag.pageview("/") }
+      if (prod) {
+         gtag.pageview("/")
+      }
       // both should be false in prod
       var resetStateOnRefresh = false
       var resetStatsOnRefresh = false
@@ -77,24 +77,26 @@ export default function Home(props) {
          var parsed_state = JSON.parse(dalledle_state)
          console.log("game status: ", parsed_state.gameStatus)
 
-         console.log(
-            "props.datestamp (the date of the image): ",
-            props.dateStamp
-         )
-         console.log("parsed.datestamp (their last play): ", parsed_state.dateStamp)
-
          // if the date of the image is different from the date of the last play
-         if (props.dateStamp !== parsed_state.dateStamp || resetStateOnRefresh) {
+         if (
+            props.dateStamp !== parsed_state.dateStamp ||
+            resetStateOnRefresh
+         ) {
             // new day, haven't played yet
-            newPuzzleResetState(parsed_state.lastCompletedTs, parsed_state.lastPlayedTs)
+            newPuzzleResetState(
+               parsed_state.lastCompletedTs,
+               parsed_state.lastPlayedTs
+            )
             // reset streak?
             let dateLastSolved = new Date(parsed_state.lastCompletedTs)
             let dateToday = new Date(props.dateStamp)
-            let timeInMilisec = dateToday - dateLastSolved;
-            let daysBetweenDates = Math.ceil(timeInMilisec / (1000 * 60 * 60 * 24));
+            let timeInMilisec = dateToday - dateLastSolved
+            let daysBetweenDates = Math.ceil(
+               timeInMilisec / (1000 * 60 * 60 * 24)
+            )
 
-            console.log("date last solved: ", dateLastSolved)
-            console.log("date today: ", dateToday)
+            console.log("last solved: ", dateLastSolved)
+            console.log("today: ", dateToday)
             console.log("days between dates: ", daysBetweenDates)
 
             if (daysBetweenDates > 1) {
@@ -108,7 +110,6 @@ export default function Home(props) {
                console.log("game in progress")
                setOverlayVisible(false)
                setDirectionsVisible(false)
-               console.log("parsed guesses: ", parsed_state.guesses)
                setGuesses(parsed_state.guesses)
             } else if (parsed_state.gameStatus === "SOLVED") {
                console.log("game solved")
@@ -133,7 +134,7 @@ export default function Home(props) {
    const incrementPlays = async () => {
       const body = { date: props.dateStamp }
 
-      console.log("incrementing where body datestamp is ", props.dateStamp)
+      console.log("incrementing plays where datestamp is ", props.dateStamp)
 
       try {
          await fetch("/api/increment_plays", {
@@ -149,7 +150,7 @@ export default function Home(props) {
    const incrementSolves = async () => {
       const body = { date: props.dateStamp }
 
-      console.log("incrementing where body datestamp is ", props.dateStamp)
+      console.log("incrementing solves where datestamp is ", props.dateStamp)
 
       try {
          await fetch("/api/increment_solves", {
@@ -163,7 +164,6 @@ export default function Home(props) {
    }
 
    const incrementUniqueUsers = async () => {
-      console.log("inc unique users")
       const body = {}
       try {
          await fetch("/api/increment_unique_users", {
@@ -209,11 +209,14 @@ export default function Home(props) {
 
    function resetCurrentStreak() {
       var dalledle_statistics = localStorage.getItem("dalledle_statistics")
-      
+
       if (dalledle_statistics) {
          var parsed_statistics = JSON.parse(dalledle_statistics)
          parsed_statistics.currentStreak = 0
-         localStorage.setItem("dalledle_statistics", JSON.stringify(parsed_statistics))
+         localStorage.setItem(
+            "dalledle_statistics",
+            JSON.stringify(parsed_statistics)
+         )
       }
    }
 
@@ -248,7 +251,9 @@ export default function Home(props) {
          }
          if (isSolved) {
             parsed_statistics.gamesWon =
-               (isNaN(parsed_statistics.gamesWon) ? 0 : Number(parsed_statistics.gamesWon)) + 1
+               (isNaN(parsed_statistics.gamesWon)
+                  ? 0
+                  : Number(parsed_statistics.gamesWon)) + 1
             parsed_statistics.currentStreak =
                (isNaN(parsed_statistics.currentStreak)
                   ? 0
@@ -258,15 +263,18 @@ export default function Home(props) {
                Number(parsed_statistics.currentStreak) >
                   Number(parsed_statistics.maxStreak)
             ) {
-               parsed_statistics.maxStreak =
-                  Number(parsed_statistics.currentStreak)
+               parsed_statistics.maxStreak = Number(
+                  parsed_statistics.currentStreak
+               )
             }
             parsed_statistics.winPercentage =
                (Number(parsed_statistics.gamesWon) /
                   Number(parsed_statistics.gamesPlayed)) *
                100
             //prisma
-            if (prod) { incrementSolves() }
+            if (prod) {
+               incrementSolves()
+            }
          }
 
          localStorage.setItem(
@@ -435,9 +443,7 @@ export default function Home(props) {
 
       for (var i = 0; i < splitGuess.length; i++) {
          const relevantWord = splitGuess[i]
-         console.log("relevantWord: " + relevantWord)
          const locInDesc = props.split_description.indexOf(relevantWord)
-         console.log("locInDesc: " + locInDesc)
 
          if (locInDesc !== -1) {
             if (locInDesc === i) {
@@ -470,7 +476,9 @@ export default function Home(props) {
       var firstGuess = currentGuessCombo.key <= 1 ? true : false
 
       if (firstGuess) {
-         if (prod) { incrementPlays() }
+         if (prod) {
+            incrementPlays()
+         }
       }
 
       if (
