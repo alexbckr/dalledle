@@ -19,6 +19,8 @@ model image {
   source_user       String @default ("")
   createdAt         DateTime @default(now())
   updatedAt         DateTime @default(now())
+  plays             Int @default(0)
+  solves            Int @default(0)
 }
 
 model stat {
