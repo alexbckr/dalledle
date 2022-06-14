@@ -13,7 +13,7 @@ datasource db {
 model image {
   id                String @id @default(cuid())
   text_description  String @default ("")
-  url               String @default ("")
+  // url is now lowercased text description with _ for spaces
   date              String @default ("") @unique
   source            String @default ("")
   source_user       String @default ("")
