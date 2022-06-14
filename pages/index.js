@@ -20,9 +20,7 @@ export const getServerSideProps = async () => {
    month = month < 10 ? "0" + month : month
 
    var isoDate = year + "-" + month + "-" + day
-
-   console.log("image date: ", isoDate)
-   console.log("with locale: ", new Date(isoDate).toLocaleDateString())
+   isoDate = new Date().toISOString().split("T")[0]
 
    const image = await prisma.image.findUnique({
       where: {
