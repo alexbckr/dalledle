@@ -14,7 +14,7 @@ const prod = process.env.NODE_ENV === "production"
 
 export const getServerSideProps = async () => {
    var isoDate = new Date().toISOString().split("T")[0]
-   // var isoDate = "2022-06-16"
+   // var isoDate = "2022-06-15"
 
    const image = await prisma.image.findUnique({
       where: {
@@ -39,6 +39,8 @@ export const getServerSideProps = async () => {
       }
    }
 
+   var image_url = "https://dalledle-images.s3.us-east-2.amazonaws.com/" + image.text_description.toLowerCase().replace(/ /g, "_") + ".jpg"
+   image.url = image_url
    image.initialState = initialState
    const sd = image.text_description.toUpperCase().split(" ")
    image.split_description = sd
@@ -190,7 +192,6 @@ export default function Home(props) {
    }
 
    function initiateLocalStorage() {
-      console.log("no local storage found")
       newPuzzleResetState("", "")
       incrementUniqueUsers()
       var initialStatisticsState = {
