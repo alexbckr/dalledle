@@ -29,20 +29,10 @@ export const getServerSideProps = async () => {
       image.updatedAt = image.updatedAt.toISOString()
    }
 
-   var initialState = ""
-
-   for (var i = 0; i < image.text_description.length; i++) {
-      if (image.text_description.charAt(i) !== " ") {
-         initialState += "_"
-      } else {
-         initialState += " "
-      }
-   }
-
    var image_url = "https://dalledle-images.s3.us-east-2.amazonaws.com/" + image.text_description.toLowerCase().replace(/ /g, "_") + ".jpg"
    image.url = image_url
-   image.initialState = initialState
    const sd = image.text_description.toUpperCase().split(" ")
+   image.initialState = "(" + sd.length + " words)"
    image.split_description = sd
    image.dateStamp = isoDate
 

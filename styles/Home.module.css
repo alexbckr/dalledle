@@ -57,8 +57,9 @@
 .display, .displaySolved {
   padding-left: 20px;
   padding-right: 20px;
-  letter-spacing: 3px;
-  word-spacing: 5px;
+  /* letter-spacing: 3px; */
+  letter-spacing: normal;
+  /* word-spacing: 5px; */
   font-size: 24px;
   cursor: default;
   margin-left: auto;
