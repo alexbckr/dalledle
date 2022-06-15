@@ -7,7 +7,8 @@
   background-color: rgba(255,255,255,0.5);
   position: absolute;
   z-index: 1;
-  opacity:1
+  opacity:1;
+  font-size: 14px;
 }
 
 .winOverlayContainer {
@@ -68,8 +69,8 @@
 
 .directionsContainer > p {
   text-align: left;
-  margin-top: .8em;
-  margin-bottom: .8em;
+  margin-top: 1em;
+  margin-bottom: .4em;
   font-size: 14px;
 }
 
@@ -99,6 +100,23 @@
 
 .stat > span {
   color: var(--green);
+}
+
+.videoDiv {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+}
+
+.instructionVideo {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.videoDiv, .instructionImage {
+  border: 1px solid #D3D6DA;
 }
 
 @media (max-width: 550px) {
