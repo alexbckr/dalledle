@@ -37,7 +37,6 @@ export default function DirectionsOverlay(props) {
                <video
                   className="instructionVideo"
                   ref={videoRef}
-                  width="250"
                   loop
                   muted
                >
