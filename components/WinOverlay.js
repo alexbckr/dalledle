@@ -15,8 +15,8 @@ export default function WinOverlay(props) {
    return (
       <div className={styles.winOverlayContainer}>
          <div className={styles.winContainer}>
-            <h1 className={styles.header}>Woooo!</h1>
-            <p>
+            <h1 className={styles.congratsHeader}>Woooo!</h1>
+            <p className={styles.congrats}>
                You solved DALL-Edle on {getDate()}. It took{" "}
                {props.guessNum +
                   " " +

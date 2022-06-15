@@ -39,9 +39,18 @@
     animation-delay: 3s;
 }
 
-.header {
+.header, .congratsHeader{
     text-transform: uppercase;
     font-size: 16px;
+}
+
+.congratsHeader {
+    font-size: 24px;
+    margin-bottom: 2px;
+}
+
+.congrats {
+    font-size: 18px;
 }
 
 .shareButton {
