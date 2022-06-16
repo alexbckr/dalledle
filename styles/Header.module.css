@@ -6,9 +6,10 @@
    justify-content: center;
    align-items: center;
    text-align: center;
+}
 
-
-   cursor: default;
+.logo {
+    cursor: pointer;
 }
 
 .logo {

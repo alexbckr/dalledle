@@ -1,3 +1,4 @@
+import Router from "next/router";
 import styles from "../styles/Header.module.css"
 
 export default function Header(props) {
@@ -27,7 +28,7 @@ export default function Header(props) {
                </div>
             </div>
          ) : (
-            <div><div className={styles.logo}>DALL-Edle <span>Archive</span></div></div>
+            <div><div onClick={() => Router.push("/") } className={styles.logo}>{props.title === "Yesterday's" ? <span>Yesterday's{" "}</span> : ""}DALL-Edle{props.title === "Archive" ? <span>{" "}Archive</span> : ""}</div></div>
          )}
       </div>
    )
