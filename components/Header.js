@@ -6,6 +6,7 @@ export default function Header(props) {
       <div className={styles.header}>
          {props.handleDirectionsClick ? (
             <div className={styles.headerContainer}>
+               <div className={styles.left}>
                <div
                   className={styles.navbarButton}
                   onClick={() => props.handleDirectionsClick()}
@@ -18,13 +19,16 @@ export default function Header(props) {
                >
                   FAQ
                </div>
+               </div>
                <div className={styles.logo}>DALL-Edle</div>
-               <div className={styles.dummyButton}>FAQ</div>
+               <div className={styles.right}>
+               <div className={styles.navbarButton} onClick={ () => Router.push('/yesterday')}>Yesterday's</div>
                <div
                   className={styles.navbarButton}
                   onClick={() => props.handleStatsClick()}
                >
                   Stats
+               </div>
                </div>
             </div>
          ) : (
