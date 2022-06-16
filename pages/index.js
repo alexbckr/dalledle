@@ -437,7 +437,7 @@ export default function Home(props) {
          const locInDesc = props.split_description.indexOf(relevantWord)
 
          if (locInDesc !== -1) {
-            if (locInDesc === i) {
+            if (props.split_description[i] === relevantWord) {
                currentGuessCombo.colors.push("#6aaa64")
             } else {
                currentGuessCombo.colors.push("#c9b458")
