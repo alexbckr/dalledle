@@ -20,7 +20,8 @@
     cursor: default;
     width: 100%;
     background-color: #eee;
-    border-radius: 4px
+    border-radius: 4px;
+    padding: .5rem 1rem;
 }
 
 .caption {
