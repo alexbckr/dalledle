@@ -14,7 +14,7 @@ const prod = process.env.NODE_ENV === "production"
 
 export const getServerSideProps = async () => {
    var isoDate = new Date().toISOString().split("T")[0]
-   // var isoDate = "2022-06-13"
+   // var isoDate = "2022-06-17"
 
    const image = await prisma.image.findUnique({
       where: {
@@ -39,6 +39,7 @@ export const getServerSideProps = async () => {
       }
    }
 
+   // yes, you can find the solution by opening the image in a new tab. but where's the fun in that?
    var image_url =
       "https://dalledle-images.s3.us-east-2.amazonaws.com/" +
       image.text_description.toLowerCase().replace(/ /g, "_") +
@@ -59,11 +60,6 @@ export default function Home(props) {
    const [solved, setSolved] = useState(false)
    const [display, setDisplay] = useState(props.initialState)
    const [guesses, setGuesses] = useState([])
-   const [overlayVisible, setOverlayVisible] = useState(true)
-   const [winVisible, setWinVisible] = useState(false)
-   const [statsVisible, setStatsVisible] = useState(false)
-   const [directionsVisible, setDirectionsVisible] = useState(true)
-   const [faqVisible, setFAQVisible] = useState(false)
    const [loading, setLoading] = useState(false)
 
    // runs onload
@@ -332,34 +328,6 @@ export default function Home(props) {
       setWinVisible(true)
    }
 
-   function handleStatsClick() {
-      setDirectionsVisible(false)
-      setWinVisible(false)
-      setFAQVisible(false)
-      setOverlayVisible(true)
-      setStatsVisible(true)
-   }
-
-   function handleDirectionsClick() {
-      setOverlayVisible(true)
-      setWinVisible(false)
-      setDirectionsVisible(true)
-      setStatsVisible(false)
-      setFAQVisible(false)
-   }
-
-   function handleFAQClick() {
-      setWinVisible(false)
-      setStatsVisible(false)
-      setDirectionsVisible(false)
-      setFAQVisible(true)
-      setOverlayVisible(true)
-   }
-
-   function handleCloseDirections() {
-      document.getElementById("guess").focus()
-   }
-
    // prereq: guess should be string
    function getSemanticSimilarity(guess, isValid) {
       // this is what the API returns when two texts match
@@ -534,63 +502,12 @@ export default function Home(props) {
 
    return (
       <>
-         {overlayVisible && (
-            <div
-               className={styles.overlayContainer}
-               onClick={() => {
-                  if (!winVisible && !faqVisible) {
-                     setOverlayVisible(false)
-                  }
-               }}
-            >
-               {winVisible && (
-                  <WinOverlay
-                     guessNum={guesses.length}
-                     imageUrl={props.url}
-                     date={props.dateStamp}
-                     dismiss={() => {
-                        setOverlayVisible(false)
-                        setWinVisible(false)
-                     }}
-                  />
-               )}
-               {statsVisible && (
-                  <StatsOverlay
-                     stats={JSON.parse(
-                        localStorage.getItem("dalledle_statistics")
-                     )}
-                  />
-               )}
-               {faqVisible && (
-                  <FAQOverlay
-                     dismiss={() => {
-                        setOverlayVisible(false)
-                        setFAQVisible(false)
-                     }}
-                  />
-               )}
-               {directionsVisible && (
-                  <DirectionsOverlay
-                     dismiss={() => {
-                        setOverlayVisible(false)
-                        handleCloseDirections()
-                     }}
-                  />
-               )}
-            </div>
-         )}
          <div className={styles.container}>
             <Head>
                <title>DALL-Edle</title>
                <meta name="description" content="Inspired by DALL-E" />
                <link rel="icon" href="/favicon.ico" />
             </Head>
-
-            <Header
-               handleStatsClick={handleStatsClick}
-               handleDirectionsClick={handleDirectionsClick}
-               handleFAQClick={handleFAQClick}
-            />
 
             <main
                className={styles.main}

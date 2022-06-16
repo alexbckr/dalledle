@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+}
+
+.bmc {
+    height: 40px;
+}
+
+.container > * {
+    padding-left: 20px;
+    padding-right: 20px;
+}

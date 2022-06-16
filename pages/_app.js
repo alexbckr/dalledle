@@ -1,5 +1,6 @@
 import '../styles/globals.css'
 import Script from 'next/script'
+import Layout from '../components/Layout'
 import * as gtag from '../lib/gtag'
 
 function MyApp({ Component, pageProps }) {
@@ -24,7 +25,9 @@ function MyApp({ Component, pageProps }) {
           `,
         }}
       />
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </>
   )
 }

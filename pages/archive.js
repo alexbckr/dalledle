@@ -32,7 +32,6 @@ export const getServerSideProps = async () => {
 export default function Archive(props) {
    return (
       <>
-         <Header title={"Archive"}/>
          <div className={styles.container}>
             <div className={styles.content}>
                {props.images.map((image) => {

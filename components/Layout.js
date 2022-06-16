@@ -5,12 +5,15 @@ import DirectionsOverlay from "./DirectionsOverlay"
 import FAQOverlay from "./FAQOverlay"
 import StatsOverlay from "./StatsOverlay"
 import WinOverlay from "./WinOverlay"
+import Footer from "./Footer"
+import { useRouter } from 'next/router'
 
 export default function Layout({ children }) {
-   const [overlayVisible, setOverlayVisible] = useState(true)
+   const router = useRouter();
+   const [overlayVisible, setOverlayVisible] = useState(router.pathname === '/')
    const [winVisible, setWinVisible] = useState(false)
    const [statsVisible, setStatsVisible] = useState(false)
-   const [directionsVisible, setDirectionsVisible] = useState(true)
+   const [directionsVisible, setDirectionsVisible] = useState(router.pathname === '/')
 
    const [faqVisible, setFAQVisible] = useState(false)
 
@@ -36,6 +39,10 @@ export default function Layout({ children }) {
       setDirectionsVisible(false)
       setFAQVisible(true)
       setOverlayVisible(true)
+   }
+
+   function handleCloseDirections() {
+      document.getElementById("guess").focus()
    }
 
    return (
@@ -87,13 +94,14 @@ export default function Layout({ children }) {
          )}
          <div>
             <Header
-               handleStatsClick={handleStatsClick}
-               handleDirectionsClick={handleDirectionsClick}
-               handleFAQClick={handleFAQClick}
+               handleStatsClick={(router.pathname === "/") ? handleStatsClick : null}
+               handleDirectionsClick={(router.pathname === "/") ? handleDirectionsClick : null}
+               handleFAQClick={(router.pathname === "/") ? handleFAQClick : null}
+               title={router.pathname === "/" ? "DALL-Edle" : "Yesterday's"}
             />
             <main>{children}</main>
+            <Footer />
          </div>
-         {/* <Footer /> */}
       </>
    )
 }
