@@ -121,10 +121,14 @@
   }
   .inputSection {
     flex-direction: column;
-    width: 90vw;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
   }
   .inputBox {
     width: calc(90vw);
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .enterButton, .homeShareButton {
@@ -141,6 +145,12 @@
     max-width: calc(100vw - 100px);
     word-wrap: break-word;
     white-space: normal!important;
+  }
+
+  .table {
+    width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .display {
