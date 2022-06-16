@@ -9,6 +9,7 @@
     margin-left: auto;
     margin-right: auto;
     padding-bottom: 80px;
+    cursor: default;
 }
 
 .image {
@@ -40,11 +41,27 @@
     color: var(--grey);
 }
 
-.watermark {
-    color: var(--grey)
+.stats {
+    color: var(--grey);
 }
 
-@media (max-width: 768px) {
+.break {
+    flex-grow: 1;
+}
+
+.stats {
+    color: var(--grey);
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+@media (max-width: 850px) {
+    .content {
+        width: 420px;
+    }
+}
+
+@media (max-width: 460px) {
     .content {
         width: 90%;
     }

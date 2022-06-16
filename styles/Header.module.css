@@ -6,9 +6,22 @@
    justify-content: center;
    align-items: center;
    text-align: center;
+}
 
+.left, .right {
+    display: flex;
+    flex-direction: row;
+    flex-basis: 40%;
+}
 
-   cursor: default;
+.right {
+    text-align: right;
+    align-items: right;
+    justify-content: right;
+}
+
+.logo {
+    cursor: pointer;
 }
 
 .logo {
@@ -42,14 +55,28 @@
     cursor: pointer;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 740px) {
     .navbarButton {
-        margin-left: 10px;
-        margin-right: 10px;
+        margin-left: 6px;
+        margin-right: 6px;
     }
 
     .navbarButton, .faqButton, .dummyButton {
-        font-size: 12px;
+        font-size: 14px;
         padding: .5rem .6rem;
+    }
+
+    .logo {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 500px) {
+    .navbarButton, .faqButton, .dummyButton {
+        font-size: 12px;
+    }
+
+    .logo {
+        font-size: 14px;
     }
 }
