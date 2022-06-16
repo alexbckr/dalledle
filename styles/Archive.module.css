@@ -48,4 +48,8 @@
     .content {
         width: 90%;
     }
+
+    .image {
+        width: 100%;
+    }
 }
