@@ -45,7 +45,7 @@ export default function Archive(props) {
             <div className={styles.content}>
                {props.images.map((image) => {
                   return (
-                     <div>
+                     <div key={image.id}>
 
                         <h4 className={styles.dateLabel}>{image.date_string} <span className={styles.watermark}>• dalledle.com</span></h4>
                         <h2 
