@@ -73,10 +73,12 @@
     .navbarButton, .faqButton, .dummyButton, .yesterday {
         font-size: 14px;
         padding: .5rem .6rem;
+        font-weight: bold;
     }
 
     .logo {
         font-size: 18px;
+        font-weight: 900;
     }
 }
 
