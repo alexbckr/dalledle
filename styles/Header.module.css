@@ -34,7 +34,7 @@
     font-weight: 100!important;
 }
 
-.navbarButton, .dummyButton, .faqButton {
+.navbarButton, .dummyButton, .faqButton, .yesterday {
     margin-right: 30px;
     margin-left: 30px;
     font-size: 18px;
@@ -50,18 +50,27 @@
     color: white;
 }
 
-.navbarButton:hover, .faqButton:hover {
+.navbarButton:hover, .faqButton:hover, .yesterday:hover {
     color: #ccc;
     cursor: pointer;
 }
 
+.yesterday {
+    font-weight: bold;
+    background: linear-gradient(to right, #EEbd89, #d13abd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: var(--fontWeight-bold);
+  font-family: var(--font-heading);
+}
+
 @media (max-width: 740px) {
-    .navbarButton {
+    .navbarButton, .yesterday {
         margin-left: 6px;
         margin-right: 6px;
     }
 
-    .navbarButton, .faqButton, .dummyButton {
+    .navbarButton, .faqButton, .dummyButton, .yesterday {
         font-size: 14px;
         padding: .5rem .6rem;
     }
@@ -72,7 +81,7 @@
 }
 
 @media (max-width: 500px) {
-    .navbarButton, .faqButton, .dummyButton {
+    .navbarButton, .faqButton, .dummyButton, .yesterday {
         font-size: 12px;
     }
 
