@@ -57,22 +57,24 @@
 .display, .displaySolved {
   padding-left: 20px;
   padding-right: 20px;
-  /* letter-spacing: 3px; */
+  /* letter-spacing: 8px; */
   letter-spacing: normal;
-  /* word-spacing: 5px; */
-  font-size: 24px;
+  word-spacing: 5px;
+  font-size: 32px;
   cursor: default;
   margin-left: auto;
   margin-right: auto;
   margin-top: 20px;
   max-width: 420px;
-  font-weight: 400;
+  font-weight: 900;
   text-align: center;
 }
 
 .displaySolved {
   letter-spacing: normal;
   animation: flip 0.8s ease forwards;
+  font-weight: 400;
+  font-size: 24px;
 }
 
 .tableSemanticSimilarity {
