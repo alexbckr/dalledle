@@ -72,6 +72,7 @@
 
 .displaySolved {
   letter-spacing: normal;
+  word-spacing: normal;
   animation: flip 0.8s ease forwards;
   font-weight: 400;
   font-size: 24px;
