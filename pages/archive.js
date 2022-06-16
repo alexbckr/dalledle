@@ -47,7 +47,7 @@ export default function Archive(props) {
                   return (
                      <div>
 
-                        <h4>{image.date_string}</h4>
+                        <h4 className={styles.dateLabel}>{image.date_string} <span className={styles.watermark}>• dalledle.com</span></h4>
                         <h2 
                         className={(showCaption === true && key === image.id) ? styles.caption : styles.captionHidden}
                         onMouseEnter={() => {
