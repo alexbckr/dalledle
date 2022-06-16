@@ -39,7 +39,10 @@ export const getServerSideProps = async () => {
       }
    }
 
-   var image_url = "https://dalledle-images.s3.us-east-2.amazonaws.com/" + image.text_description.toLowerCase().replace(/ /g, "_") + ".jpg"
+   var image_url =
+      "https://dalledle-images.s3.us-east-2.amazonaws.com/" +
+      image.text_description.toLowerCase().replace(/ /g, "_") +
+      ".jpg"
    image.url = image_url
    const sd = image.text_description.toUpperCase().split(" ")
    // image.initialState = "(" + sd.length + " words)"
@@ -133,6 +136,15 @@ export default function Home(props) {
          }
       }
    }, [guesses])
+
+   function getDate() {
+      if (props.date === null || props.date == undefined) {
+        return "";
+      }
+      var date_array = props.date.split("-")
+      var isoDate = Number(date_array[1]) + "/" + Number(date_array[2]) + "/" + date_array[0]
+      return isoDate
+   }
 
    const incrementPlays = async () => {
       const body = { date: props.dateStamp }
@@ -502,6 +514,24 @@ export default function Home(props) {
       return
    }
 
+   function handleShare() {
+      navigator.clipboard
+         .writeText(
+            "I solved the DALL-Edle " +
+               getDate() +
+               " puzzle in " +
+               props.guessNum +
+               (props.guessNum === 1 ? " guess." : " guesses.") +
+               " http://dalledle.com"
+         )
+         .then(() => {
+            alert("Copied to clipboard!")
+         })
+         .catch(() => {
+            alert("Couldn't copy. Not sure why :(")
+         })
+   }
+
    return (
       <>
          {overlayVisible && (
@@ -582,6 +612,9 @@ export default function Home(props) {
                   </div>
                   <div className={styles.inputSection}>
                      <input
+                        placeholder={
+                           solved ? "" : "darth vader on a waterslide"
+                        }
                         autocomplete="off"
                         autocorrect="off"
                         autocapitalize="off"
@@ -590,13 +623,19 @@ export default function Home(props) {
                         id="guess"
                      ></input>
                      <div
-                        className={styles.enterButton}
+                        className={
+                           solved ? styles.homeShareButton : styles.enterButton
+                        }
                         id="vg"
                         onClick={() =>
-                           handleGuess(document.getElementById("guess").value)
+                           solved
+                              ? handleShare()
+                              : handleGuess(
+                                   document.getElementById("guess").value
+                                )
                         }
                      >
-                        ENTER
+                        {solved ? "SHARE" : "ENTER"}
                      </div>
                   </div>
                   {guesses.length !== 0 && (

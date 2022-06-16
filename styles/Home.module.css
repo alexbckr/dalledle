@@ -30,8 +30,7 @@
   width: 100%;
 }
 
-.enterButton {
-  background-color: #D3D6DA;
+.enterButton, .homeShareButton {
   border-radius: 4px;
   font-weight: 600;
   font-size: 24px;
@@ -40,8 +39,17 @@
   margin-left: 10px;
 }
 
-.enterButton::selection, .header::selection, .display::selection {
+.enterButton {
+  background-color: #D3D6DA;
+}
+
+.enterButton::selection, .homeShareButton, .header::selection, .display::selection {
   background-color: rgba(0,0,0,0);
+}
+
+.homeShareButton {
+  background-color: var(--green);
+  color: white;
 }
 
 .inputBox {
@@ -85,6 +93,7 @@
   display: table;
   max-width: 100%;
   max-width: 420px;
+  margin-bottom: 80px;
   margin-top: 20px;
 }
 
@@ -126,8 +135,9 @@
     width: calc(100vw - 20px);
   }
 
-  .enterButton {
+  .enterButton, .homeShareButton {
     margin-top: 10px;
+    margin-bottom: 20px;
   }
 
   .tableText {
@@ -138,6 +148,10 @@
 
   .display {
     max-width: 100vw;
+  }
+
+  .table {
+    margin-top: 0px;
   }
 }
 
