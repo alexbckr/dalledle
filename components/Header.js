@@ -30,16 +30,6 @@ export default function Header(props) {
                      Yesterday's
                   </div>
                   <div
-                     className={styles.yesterday}
-                     onClick={() => Router.push("/")}
-                  >
-                     {props.title === "Yesterday's" ? (
-                        <span> Today's</span>
-                     ) : (
-                        ""
-                     )}
-                  </div>
-                  <div
                      className={styles.navbarButton}
                      onClick={() => props.handleStatsClick()}
                   >
@@ -48,8 +38,22 @@ export default function Header(props) {
                </div>
             </div>
          ) : (
-            <div>
+            <div className={styles.headerContainer}>
                {/* this appears if we're on yesterday's or archived (because props.handleDirectionsClick is undefined)  */}
+               <div className={styles.left}>
+                  <div
+                     className={styles.navbarButton}
+                     onClick={() => props.handleDirectionsClick()}
+                  >
+                     Help
+                  </div>
+                  <div
+                     className={styles.faqButton}
+                     onClick={() => props.handleFAQClick()}
+                  >
+                     FAQ
+                  </div>
+               </div>
                <div onClick={() => Router.push("/")} className={styles.logo}>
                   {/* this is another operatror that decides whether to put yesterdays before or archive after */}
                   {props.title === "Yesterday's" ? (
@@ -59,6 +63,18 @@ export default function Header(props) {
                   )}
                   DALL-Edle
                   {props.title === "Archive" ? <span> Archive</span> : ""}
+               </div>
+               <div className={styles.right}>
+                  <div
+                        className={styles.yesterday}
+                        onClick={() => Router.push("/")}
+                     >
+                        {props.title === "Yesterday's" ? (
+                           <span> Today's</span>
+                        ) : (
+                           ""
+                        )}
+                  </div>
                </div>
             </div>
          )}
