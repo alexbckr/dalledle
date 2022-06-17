@@ -23,6 +23,7 @@ export default function Header(props) {
                <div className={styles.logo}>DALL-Edle</div>
                <div className={styles.right}>
                <div className={styles.yesterday} onClick={ () => Router.push('/yesterday')}>Yesterday's</div>
+               <div className={styles.yesterday} onClick={() => Router.push("/")}>{props.title === "Yesterday's" ? <span>{" "}Today's</span> : ""}</div>
                <div
                   className={styles.navbarButton}
                   onClick={() => props.handleStatsClick()}
