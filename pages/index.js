@@ -47,8 +47,15 @@ export const getServerSideProps = async () => {
    const sd = image.text_description.toUpperCase().split(" ")
    // image.initialState = "(" + sd.length + " words)"
    image.initialState = initialState
+   console.log("STATE: " + initialState)
    image.split_description = sd
    image.dateStamp = isoDate
+
+   // let currentDisplayCombo = {
+   //    key = 1,
+   //    words = [],
+   //    html = "<p> something<\p>",
+   // }
 
    return {
       props: image,
@@ -57,7 +64,7 @@ export const getServerSideProps = async () => {
 
 export default function Home(props) {
    const [solved, setSolved] = useState(false)
-   const [display, setDisplay] = useState(props.initialState)
+   const [display, setDisplay] = useState([])
    const [guesses, setGuesses] = useState([])
    const [overlayVisible, setOverlayVisible] = useState(true)
    const [winVisible, setWinVisible] = useState(false)
@@ -117,9 +124,11 @@ export default function Home(props) {
                setOverlayVisible(false)
                setDirectionsVisible(false)
                setGuesses(parsed_state.guesses)
+               setDisplay(parsed_state.display)
             } else if (parsed_state.gameStatus === "SOLVED") {
                console.log("game solved")
                setGuesses(parsed_state.guesses)
+               setDisplay(parsed_state.display)
                handleSolve()
             }
          }
@@ -136,6 +145,17 @@ export default function Home(props) {
          }
       }
    }, [guesses])
+
+   useEffect(() => {
+      if (display.length > 0) {
+         const dalledle_state = localStorage.getItem("dalledle_state")
+         if (dalledle_state) {
+            var parsed = JSON.parse(dalledle_state)
+            parsed.display = display
+            localStorage.setItem("dalledle_state", JSON.stringify(parsed))
+         }
+      }
+   }, [display])
 
    function getDate() {
       if (props.date === null || props.date == undefined) {
@@ -195,6 +215,7 @@ export default function Home(props) {
       var initialDalledleState = {
          gameStatus: "IN_PROGRESS",
          guesses: [],
+         display: [],
          lastCompletedTs: lastCompleted,
          lastPlayedTs: lastPlayed,
       }
@@ -212,6 +233,7 @@ export default function Home(props) {
          gamesPlayed: "",
          gamesWon: "",
          guesses: [],
+         display: [],
          maxStreak: "",
          winPercentage: "",
       }
@@ -436,6 +458,8 @@ export default function Home(props) {
    }
 
    function completeGuessProcessing(ss, guess) {
+      console.log(ss)
+      console.log(guess)
       // gtag("event", "guess_submitted", {
       //    event_category: props.dateStamp,
       //    event_label: guess,
@@ -452,6 +476,11 @@ export default function Home(props) {
          colors: [],
       }
 
+      let currentDisplayCombo = {
+         key: guesses.length + 1,
+         words: [],
+      }
+
       var splitGuess_noUpper = guess.split(" ")
       var splitGuess = guess.toUpperCase().split(" ")
 
@@ -462,11 +491,15 @@ export default function Home(props) {
          if (locInDesc !== -1) {
             if (props.split_description[i] === relevantWord) {
                currentGuessCombo.colors.push("#6aaa64")
+               currentDisplayCombo.words.push(props.split_description[i])
+               console.log("SPKa " + props.split_description)
             } else {
                currentGuessCombo.colors.push("#c9b458")
+               currentDisplayCombo.words.push("_".repeat(props.split_description[i].length))
             }
          } else {
             currentGuessCombo.colors.push("#787c7e")
+            currentDisplayCombo.words.push("_".repeat(props.split_description[i].length))
          }
       }
 
@@ -485,7 +518,21 @@ export default function Home(props) {
       html += "</p>"
       currentGuessCombo.html = html
 
+      var html = "<p>"
+      for (var i = 0; i < currentDisplayCombo.words.length; i++) {
+         html += splitGuess_noUpper[i]
+         if (i < currentDisplayCombo.words.length - 1) {
+            html += " "
+         }
+      }
+      html += "</p>"
+      currentDisplayCombo.html = html
+      console.log(currentDisplayCombo.html)
+      console.log(typeof(guesses))
+      console.log(typeof(display))
+
       setGuesses((guesses) => [...guesses, currentGuessCombo])
+      setDisplay((display) => [...display, currentDisplayCombo])
 
       var firstGuess = currentGuessCombo.key <= 1 ? true : false
 
@@ -608,7 +655,19 @@ export default function Home(props) {
                   <div
                      className={solved ? styles.displaySolved : styles.display}
                   >
-                     {display}
+                     {/* {display} */}
+                     {display?
+                              .map((display, key) => (
+                                 <tr key={key}>
+                                    <td className={styles.tableGuessNum}>
+                                       {display.key}
+                                    </td>
+                                    <td className={styles.tableText}>
+                                       {parse(display.html)}
+                                    </td>
+                                 </tr>
+                              ))
+                              .reverse()}
                   </div>
                   <div className={styles.inputSection}>
                      <input
