@@ -7,6 +7,7 @@ import DirectionsOverlay from "../components/DirectionsOverlay"
 import FAQOverlay from "../components/FAQOverlay"
 import { prisma } from "../lib/prisma.js"
 import { useState, useEffect } from "react"
+import { handleShare } from "../utils"
 import parse from "html-react-parser"
 import * as gtag from "../lib/gtag"
 
@@ -515,24 +516,6 @@ export default function Home(props) {
       return
    }
 
-   function handleShare() {
-      navigator.clipboard
-         .writeText(
-            "I solved the DALL-Edle " +
-               getDate() +
-               " puzzle in " +
-               guesses.length +
-               (guesses.length === 1 ? " guess." : " guesses.") +
-               " http://dalledle.com"
-         )
-         .then(() => {
-            alert("Copied to clipboard!")
-         })
-         .catch(() => {
-            alert("Couldn't copy. Not sure why :(")
-         })
-   }
-
    return (
       <>
          {overlayVisible && (
@@ -630,7 +613,7 @@ export default function Home(props) {
                         id="vg"
                         onClick={() =>
                            solved
-                              ? handleShare()
+                              ? handleShare(getDate(), guesses.length)
                               : handleGuess(
                                    document.getElementById("guess").value
                                 )

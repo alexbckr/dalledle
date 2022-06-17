@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import styles from "../styles/Overlays.module.css"
 
+import { handleShare } from "../utils";
+
 export default function WinOverlay(props) {
 
    function getDate() {
@@ -26,15 +28,7 @@ export default function WinOverlay(props) {
             <img src={props.imageUrl} className={styles.image}></img>
             <div
                className={styles.shareButton}
-               onClick={() => {
-                navigator.clipboard.writeText("I solved the DALL-Edle " + getDate() + " puzzle in " + (props.guessNum) + (props.guessNum === 1 ? " guess." : " guesses.") + " http://dalledle.com")
-                .then(() => {
-                  alert("Copied to clipboard!");
-                })
-                .catch(() => {
-                  alert("Couldn't copy. Not sure why :(");
-                });
-                }}
+               onClick={() => {handleShare(getDate(), props.guessNum)}}
             >
                Share
             </div>
