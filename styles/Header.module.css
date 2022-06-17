@@ -41,7 +41,7 @@
     padding: .5rem .8rem;
 }
 
-.faqButton, .dummyButton {
+.faqButton, .yesterday {
     margin-left: 0!important;
     margin-right: 0!important;
 }
@@ -65,7 +65,7 @@
 }
 
 @media (max-width: 740px) {
-    .navbarButton, .yesterday {
+    .navbarButton {
         margin-left: 6px;
         margin-right: 6px;
     }
