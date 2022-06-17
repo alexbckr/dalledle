@@ -521,8 +521,8 @@ export default function Home(props) {
             "I solved the DALL-Edle " +
                getDate() +
                " puzzle in " +
-               props.guessNum +
-               (props.guessNum === 1 ? " guess." : " guesses.") +
+               guesses.length +
+               (guesses.length === 1 ? " guess." : " guesses.") +
                " http://dalledle.com"
          )
          .then(() => {
