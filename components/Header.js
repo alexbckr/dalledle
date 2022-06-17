@@ -40,19 +40,7 @@ export default function Header(props) {
          ) : (
             <div className={styles.headerContainer}>
                {/* this appears if we're on yesterday's or archived (because props.handleDirectionsClick is undefined)  */}
-               <div className={styles.left}>
-                  <div
-                     className={styles.navbarButton}
-                     onClick={() => props.handleDirectionsClick()}
-                  >
-                     Help
-                  </div>
-                  <div
-                     className={styles.faqButton}
-                     onClick={() => props.handleFAQClick()}
-                  >
-                     FAQ
-                  </div>
+               <div className={styles.leftSM}>
                </div>
                <div onClick={() => Router.push("/")} className={styles.logo}>
                   {/* this is another operatror that decides whether to put yesterdays before or archive after */}
@@ -64,7 +52,7 @@ export default function Header(props) {
                   DALL-Edle
                   {props.title === "Archive" ? <span> Archive</span> : ""}
                </div>
-               <div className={styles.right}>
+               <div className={styles.rightSM}>
                   <div
                         className={styles.yesterday}
                         onClick={() => Router.push("/")}

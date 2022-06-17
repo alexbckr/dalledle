@@ -8,10 +8,14 @@
    text-align: center;
 }
 
-.left, .right {
+.left, .right, .leftSM, .rightSM {
     display: flex;
     flex-direction: row;
     flex-basis: 40%;
+}
+
+.leftSM, .rightSM {
+    flex-basis: 20%;
 }
 
 .right {
