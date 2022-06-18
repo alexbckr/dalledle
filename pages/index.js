@@ -13,8 +13,8 @@ import * as gtag from "../lib/gtag"
 const prod = process.env.NODE_ENV === "production"
 
 export const getServerSideProps = async () => {
-   // var isoDate = new Date().toISOString().split("T")[0]
-   var isoDate = "2022-06-17"
+   var isoDate = new Date().toISOString().split("T")[0]
+   // var isoDate = "2022-06-17"
 
    const image = await prisma.image.findUnique({
       where: {
