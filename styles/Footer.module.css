@@ -29,3 +29,13 @@
     opacity: 1;
     transition: ease 0.3s
 }
+
+@media (max-width: 600px) {
+    .container > * {
+        font-size: 18px;
+    }
+
+    .bmc {
+        height: 20px;
+    }
+}
