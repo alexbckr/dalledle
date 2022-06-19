@@ -120,6 +120,8 @@ export default function Home(props) {
          else {
             if (parsed_state.gameStatus === "IN_PROGRESS") {
                console.log("game in progress")
+               props.setOverlayVisible(false)
+               props.setDirectionsVisible(false)
                // set overlay visible false, set directions visible false
                setGuesses(parsed_state.guesses)
             } else if (parsed_state.gameStatus === "SOLVED") {
@@ -358,8 +360,16 @@ export default function Home(props) {
       console.log("puzzle solved")
       setDisplay(props.text_description)
       setSolved(true)
+      props.setImgUrl(props.url)
+      console.log("guesses.length is ", guesses.length)
+      props.setNumGuesses(guesses.length)
+      props.setDateStamp(props.dateStamp)
       document.getElementById("guess").disabled = true
       document.getElementById("vg").disabled = true
+
+      props.setDirectionsVisible(false)
+      props.setWinVisible(true)
+      props.setOverlayVisible(true)
    }
 
    // prereq: guess should be string

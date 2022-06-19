@@ -1,19 +1,27 @@
 import Header from "./Header"
-import { useState } from "react"
+import { useState, Children, cloneElement } from "react"
 import styles from "../styles/Home.module.css"
 import DirectionsOverlay from "./DirectionsOverlay"
 import FAQOverlay from "./FAQOverlay"
 import StatsOverlay from "./StatsOverlay"
 import WinOverlay from "./WinOverlay"
 import Footer from "./Footer"
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router"
 
 export default function Layout({ children }) {
-   const router = useRouter();
-   const [overlayVisible, setOverlayVisible] = useState(router.pathname === '/')
+   const router = useRouter()
+   const [overlayVisible, setOverlayVisible] = useState(router.pathname === "/")
    const [winVisible, setWinVisible] = useState(false)
    const [statsVisible, setStatsVisible] = useState(false)
-   const [directionsVisible, setDirectionsVisible] = useState(router.pathname === '/')
+   const [numGuesses, setNumGuesses] = useState(0)
+   const [imgUrl, setImgUrl] = useState("")
+   const [dateStamp, setDateStamp] = useState("")
+   const [directionsVisible, setDirectionsVisible] = useState(
+      router.pathname === "/"
+   )
+
+   // probably not great
+
 
    const [faqVisible, setFAQVisible] = useState(false)
 
@@ -45,6 +53,17 @@ export default function Layout({ children }) {
       document.getElementById("guess").focus()
    }
 
+   const childrenWithProps = Children.map(children, (child) =>
+      cloneElement(child, {
+         setDirectionsVisible: setDirectionsVisible,
+         setWinVisible: setWinVisible,
+         setOverlayVisible: setOverlayVisible,
+         setNumGuesses: setNumGuesses,
+         setImgUrl: setImgUrl,
+         setDateStamp: setDateStamp,
+      })
+   )
+
    return (
       <>
          {overlayVisible && (
@@ -58,9 +77,9 @@ export default function Layout({ children }) {
             >
                {winVisible && (
                   <WinOverlay
-                     guessNum={guesses.length}
-                     imageUrl={props.url}
-                     date={props.dateStamp}
+                     guessNum={numGuesses}
+                     imageUrl={imgUrl}
+                     date={dateStamp}
                      dismiss={() => {
                         setOverlayVisible(false)
                         setWinVisible(false)
@@ -94,12 +113,22 @@ export default function Layout({ children }) {
          )}
          <div>
             <Header
-               handleStatsClick={(router.pathname === "/") ? handleStatsClick : null}
-               handleDirectionsClick={(router.pathname === "/") ? handleDirectionsClick : null}
-               handleFAQClick={(router.pathname === "/") ? handleFAQClick : null}
-               title={router.pathname === "/" ? "DALL-Edle" : (router.pathname === "/yesterday" ? "Yesterday's" : "Archive")}
+               handleStatsClick={
+                  router.pathname === "/" ? handleStatsClick : null
+               }
+               handleDirectionsClick={
+                  router.pathname === "/" ? handleDirectionsClick : null
+               }
+               handleFAQClick={router.pathname === "/" ? handleFAQClick : null}
+               title={
+                  router.pathname === "/"
+                     ? "DALL-Edle"
+                     : router.pathname === "/yesterday"
+                     ? "Yesterday's"
+                     : "Archive"
+               }
             />
-            <main>{children}</main>
+            <main>{childrenWithProps}</main>
             <Footer />
          </div>
       </>
