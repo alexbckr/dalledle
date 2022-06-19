@@ -13,7 +13,7 @@ export default function Layout({ children }) {
    const [overlayVisible, setOverlayVisible] = useState(router.pathname === "/")
    const [winVisible, setWinVisible] = useState(false)
    const [statsVisible, setStatsVisible] = useState(false)
-   const [numGuesses, setNumGuesses] = useState(0)
+   const [numGuesses, setNumGuesses] = useState("")
    const [imgUrl, setImgUrl] = useState("")
    const [dateStamp, setDateStamp] = useState("")
    const [directionsVisible, setDirectionsVisible] = useState(

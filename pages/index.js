@@ -141,6 +141,7 @@ export default function Home(props) {
             parsed.guesses = guesses
             localStorage.setItem("dalledle_state", JSON.stringify(parsed))
          }
+         props.setNumGuesses(guesses.length)
       }
    }, [guesses])
 
@@ -362,7 +363,7 @@ export default function Home(props) {
       setSolved(true)
       props.setImgUrl(props.url)
       console.log("guesses.length is ", guesses.length)
-      props.setNumGuesses(guesses.length)
+      props.setNumGuesses(guesses.length + "")
       props.setDateStamp(props.dateStamp)
       document.getElementById("guess").disabled = true
       document.getElementById("vg").disabled = true
