@@ -11,5 +11,12 @@ export default async function handle(req, res) {
       },
    })
 
+   const total_return_visits = await prisma.stat_book.update({
+      where: { id: "total_return_visits" },
+      data: {
+         total_return_visits: { increment: 1 },
+      },
+   })
+
    res.json(stat)
 }

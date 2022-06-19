@@ -32,4 +32,6 @@ model stat_book {
   unique_users     Int @default(0)
   total_plays      Int @default(0)
   total_solves     Int @default(0)
+  total_unique_visits     Int @default(0)
+  total_return_visits     Int @default(0)
 }
