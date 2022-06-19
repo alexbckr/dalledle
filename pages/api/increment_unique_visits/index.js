@@ -12,7 +12,7 @@ export default async function handle(req, res) {
    })
 
    const total_unique_visits = await prisma.stat_book.update({
-      where: { id: "total_unique_visits" },
+      where: { id: "stat_book" },
       data: {
          total_unique_visits: { increment: 1 },
       },
