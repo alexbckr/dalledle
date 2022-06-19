@@ -8,10 +8,14 @@
    text-align: center;
 }
 
-.left, .right {
+.left, .right, .leftSM, .rightSM {
     display: flex;
     flex-direction: row;
     flex-basis: 40%;
+}
+
+.leftSM, .rightSM {
+    flex-basis: 20%;
 }
 
 .right {
@@ -34,14 +38,14 @@
     font-weight: 100!important;
 }
 
-.navbarButton, .dummyButton, .faqButton {
+.navbarButton, .dummyButton, .faqButton, .yesterday {
     margin-right: 30px;
     margin-left: 30px;
     font-size: 18px;
     padding: .5rem .8rem;
 }
 
-.faqButton, .dummyButton {
+.faqButton, .yesterday {
     margin-left: 0!important;
     margin-right: 0!important;
 }
@@ -50,9 +54,18 @@
     color: white;
 }
 
-.navbarButton:hover, .faqButton:hover {
+.navbarButton:hover, .faqButton:hover, .yesterday:hover {
     color: #ccc;
     cursor: pointer;
+}
+
+.yesterday {
+    font-weight: bold;
+    background: linear-gradient(to right, #EEbd89, #d13abd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: var(--fontWeight-bold);
+  font-family: var(--font-heading);
 }
 
 @media (max-width: 740px) {
@@ -61,18 +74,20 @@
         margin-right: 6px;
     }
 
-    .navbarButton, .faqButton, .dummyButton {
+    .navbarButton, .faqButton, .dummyButton, .yesterday {
         font-size: 14px;
         padding: .5rem .6rem;
+        /* font-weight: bold; */
     }
 
     .logo {
         font-size: 18px;
+        /* font-weight: 900; */
     }
 }
 
 @media (max-width: 500px) {
-    .navbarButton, .faqButton, .dummyButton {
+    .navbarButton, .faqButton, .dummyButton, .yesterday {
         font-size: 12px;
     }
 

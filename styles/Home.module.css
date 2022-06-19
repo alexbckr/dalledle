@@ -65,15 +65,16 @@
 .display, .displaySolved {
   padding-left: 20px;
   padding-right: 20px;
-  letter-spacing: 3px;
-  word-spacing: 5px;
+  /* letter-spacing: 3px; */
+  /* word-spacing: 5px; */
   font-size: 32px;
   cursor: default;
   margin-left: auto;
   margin-right: auto;
   margin-top: 20px;
   max-width: 420px;
-  font-weight: 900;
+  /* font-weight: 900; */
+  font-weight: 400;
   text-align: center;
 }
 
@@ -112,38 +113,44 @@
   color: orange;
 }
 
-@media (max-width: 420px) {
-  .game {
-    margin-top: 10px;
-  }
-
-  .main {
-    max-width: calc(100vw);
-  }
-
+@media (max-width: 460px) {
   .mainImage {
     width: 90vw;
     margin-left: auto;
     margin-right: auto;
   }
-
   .inputSection {
     flex-direction: column;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
   }
-
   .inputBox {
-    width: calc(100vw - 20px);
+    width: calc(90vw);
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .enterButton, .homeShareButton {
     margin-top: 10px;
     margin-bottom: 20px;
   }
-
+  .main {
+    max-width: calc(100vw);
+  }
+  .game {
+    margin-top: 10px;
+  }
   .tableText {
     max-width: calc(100vw - 100px);
     word-wrap: break-word;
     white-space: normal!important;
+  }
+
+  .table {
+    width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .display {

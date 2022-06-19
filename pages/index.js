@@ -29,15 +29,17 @@ export const getServerSideProps = async () => {
       image.updatedAt = image.updatedAt.toISOString()
    }
 
-   var initialState = ""
+   // var initialState = ""
 
-   for (var i = 0; i < image.text_description.length; i++) {
-      if (image.text_description.charAt(i) !== " ") {
-         initialState += "_"
-      } else {
-         initialState += " "
-      }
-   }
+   // for (var i = 0; i < image.text_description.length; i++) {
+   //    if (image.text_description.charAt(i) !== " ") {
+   //       initialState += "_"
+   //    } else {
+   //       initialState += " "
+   //    }
+   // }
+
+   // image.initialState = initialState
 
    // yes, you can find the solution by opening the image in a new tab. but where's the fun in that?
    var image_url =
@@ -46,8 +48,7 @@ export const getServerSideProps = async () => {
       ".jpg"
    image.url = image_url
    const sd = image.text_description.toUpperCase().split(" ")
-   // image.initialState = "(" + sd.length + " words)"
-   image.initialState = initialState
+   image.initialState = "(" + sd.length + " words)"
    image.split_description = sd
    image.dateStamp = isoDate
 
@@ -60,6 +61,7 @@ export default function Home(props) {
    const [solved, setSolved] = useState(false)
    const [display, setDisplay] = useState(props.initialState)
    const [guesses, setGuesses] = useState([])
+   const [isUniqueUser, setIsUniqueUser] = useState(false)
    const [loading, setLoading] = useState(false)
 
    // runs onload
@@ -72,10 +74,18 @@ export default function Home(props) {
       var resetStatsOnRefresh = false
       const dalledle_state = localStorage.getItem("dalledle_state")
       if (!dalledle_state || resetStatsOnRefresh) {
-         // no local storage found
+         // no local storage found (the user is new)
+         if (prod) {
+            incrementUniqueVisits()
+         }
+         // this will set us up for incrementing plays, if the user decides to play
+         setIsUniqueUser(true)
          initiateLocalStorage()
       } else {
-         console.log("local storage found")
+         // local storage found (the user is returning)
+         if (prod) {
+            incrementReturnVisits()
+         }
          var parsed_state = JSON.parse(dalledle_state)
          console.log("game status: ", parsed_state.gameStatus)
 
@@ -97,9 +107,9 @@ export default function Home(props) {
                timeInMilisec / (1000 * 60 * 60 * 24)
             )
 
-            console.log("last solved: ", dateLastSolved)
-            console.log("today: ", dateToday)
-            console.log("days between dates: ", daysBetweenDates)
+            // console.log("last solved: ", dateLastSolved)
+            // console.log("today: ", dateToday)
+            // console.log("days between dates: ", daysBetweenDates)
 
             if (daysBetweenDates > 1) {
                console.log("reset streak")
@@ -113,7 +123,7 @@ export default function Home(props) {
                // set overlay visible false, set directions visible false
                setGuesses(parsed_state.guesses)
             } else if (parsed_state.gameStatus === "SOLVED") {
-               console.log("game solved")
+               // console.log("game solved")
                setGuesses(parsed_state.guesses)
                handleSolve()
             }
@@ -134,17 +144,23 @@ export default function Home(props) {
 
    function getDate() {
       if (props.date === null || props.date == undefined) {
-        return "";
+         return ""
       }
       var date_array = props.date.split("-")
-      var isoDate = Number(date_array[1]) + "/" + Number(date_array[2]) + "/" + date_array[0]
+      var isoDate =
+         Number(date_array[1]) +
+         "/" +
+         Number(date_array[2]) +
+         "/" +
+         date_array[0]
       return isoDate
    }
 
    const incrementPlays = async () => {
-      const body = { date: props.dateStamp }
+      const body = { date: props.dateStamp, unique: isUniqueUser }
 
       console.log("incrementing plays where datestamp is ", props.dateStamp)
+      console.log("incrementing " + (isUniqueUser ? "unique" : "return") + " plays where datestamp is ", props.dateStamp)
 
       try {
          await fetch("/api/increment_plays", {
@@ -173,10 +189,35 @@ export default function Home(props) {
       }
    }
 
-   const incrementUniqueUsers = async () => {
-      const body = {}
+   const incrementUniqueVisits = async () => {
+      const body = { date: props.dateStamp }
+
+      console.log(
+         "incrementing unique visits where datestamp is ",
+         props.dateStamp
+      )
+
       try {
-         await fetch("/api/increment_unique_users", {
+         await fetch("/api/increment_unique_visits", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+         })
+      } catch (error) {
+         console.error(error)
+      }
+   }
+
+   const incrementReturnVisits = async () => {
+      const body = { date: props.dateStamp }
+
+      console.log(
+         "incrementing return visits where datestamp is ",
+         props.dateStamp
+      )
+
+      try {
+         await fetch("/api/increment_return_visits", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),
@@ -201,7 +242,6 @@ export default function Home(props) {
 
    function initiateLocalStorage() {
       newPuzzleResetState("", "")
-      incrementUniqueUsers()
       var initialStatisticsState = {
          currentStreak: "",
          gamesPlayed: "",
@@ -482,8 +522,8 @@ export default function Home(props) {
             "I solved the DALL-Edle " +
                getDate() +
                " puzzle in " +
-               props.guessNum +
-               (props.guessNum === 1 ? " guess." : " guesses.") +
+               guesses.length +
+               (guesses.length === 1 ? " guess." : " guesses.") +
                " http://dalledle.com"
          )
          .then(() => {
@@ -499,7 +539,10 @@ export default function Home(props) {
          <div className={styles.container}>
             <Head>
                <title>DALL-Edle</title>
-               <meta name="description" content="Inspired by DALL-E" />
+               <meta
+                  name="description"
+                  content="A Wordle-inspired caption guessing game with DALL-E images."
+               />
                <link rel="icon" href="/favicon.ico" />
             </Head>
 

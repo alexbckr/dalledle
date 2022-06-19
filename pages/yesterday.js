@@ -3,6 +3,7 @@ import styles from "../styles/Archive.module.css"
 import { useEffect, useState } from "react"
 import { prisma } from "../lib/prisma"
 import ArchiveCard from "../components/ArchiveCard"
+import Head from "next/head"
 
 export const getServerSideProps = async () => {
    var isoDate = new Date()
@@ -34,6 +35,11 @@ export const getServerSideProps = async () => {
 export default function Archive(props) {
    return (
       <>
+        <Head>
+           <title>DALL-Edle / Yesterday's</title>
+           <meta name="description" content="Yesterday's DALL-Edle solution." />
+           <link rel="icon" href="/favicon.ico" />
+        </Head>
          <div className={styles.container}>
             <div className={styles.content}>
                <ArchiveCard image={props} key={props.id} />
