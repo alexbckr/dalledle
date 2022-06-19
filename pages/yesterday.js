@@ -3,6 +3,7 @@ import styles from "../styles/Archive.module.css"
 import { useEffect, useState } from "react"
 import { prisma } from "../lib/prisma"
 import ArchiveCard from "../components/ArchiveCard"
+import Head from "next/head"
 
 export const getServerSideProps = async () => {
    var isoDate = new Date()

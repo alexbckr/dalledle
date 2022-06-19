@@ -2,6 +2,7 @@ import Header from "../components/Header"
 import styles from "../styles/Archive.module.css"
 import { useEffect, useState } from "react"
 import { prisma } from "../lib/prisma"
+import Head from "next/head"
 import ArchiveCard from "../components/ArchiveCard"
 
 export const getServerSideProps = async () => {
