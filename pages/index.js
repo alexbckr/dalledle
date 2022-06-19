@@ -321,11 +321,6 @@ export default function Home(props) {
       setSolved(true)
       document.getElementById("guess").disabled = true
       document.getElementById("vg").disabled = true
-      setStatsVisible(false)
-      setDirectionsVisible(false)
-      setFAQVisible(false)
-      setOverlayVisible(true)
-      setWinVisible(true)
    }
 
    // prereq: guess should be string

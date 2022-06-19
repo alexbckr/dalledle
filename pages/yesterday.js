@@ -34,7 +34,6 @@ export const getServerSideProps = async () => {
 export default function Archive(props) {
    return (
       <>
-         <Header title={"Yesterday's"}/>
          <div className={styles.container}>
             <div className={styles.content}>
                <ArchiveCard image={props} key={props.id} />
