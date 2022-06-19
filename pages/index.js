@@ -177,7 +177,7 @@ export default function Home(props) {
    }
 
    const incrementSolves = async () => {
-      const body = { date: props.dateStamp }
+      const body = { date: props.dateStamp, unique: isUniqueUser }
 
       console.log("incrementing solves where datestamp is ", props.dateStamp)
 
