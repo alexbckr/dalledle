@@ -41,6 +41,7 @@ export const getServerSideProps = async () => {
 
    // image.initialState = initialState
 
+   // yes, you can find the solution by opening the image in a new tab. but where's the fun in that?
    var image_url =
       "https://dalledle-images.s3.us-east-2.amazonaws.com/" +
       image.text_description.toLowerCase().replace(/ /g, "_") +
@@ -60,11 +61,6 @@ export default function Home(props) {
    const [solved, setSolved] = useState(false)
    const [display, setDisplay] = useState(props.initialState)
    const [guesses, setGuesses] = useState([])
-   const [overlayVisible, setOverlayVisible] = useState(true)
-   const [winVisible, setWinVisible] = useState(false)
-   const [statsVisible, setStatsVisible] = useState(false)
-   const [directionsVisible, setDirectionsVisible] = useState(true)
-   const [faqVisible, setFAQVisible] = useState(false)
    const [isUniqueUser, setIsUniqueUser] = useState(false)
    const [loading, setLoading] = useState(false)
 
@@ -123,9 +119,10 @@ export default function Home(props) {
          // otherwise, we're at the same date as last play (the date has not changed)
          else {
             if (parsed_state.gameStatus === "IN_PROGRESS") {
-               // console.log("game in progress")
-               setOverlayVisible(false)
-               setDirectionsVisible(false)
+               console.log("game in progress")
+               props.setOverlayVisible(false)
+               props.setDirectionsVisible(false)
+               // set overlay visible false, set directions visible false
                setGuesses(parsed_state.guesses)
             } else if (parsed_state.gameStatus === "SOLVED") {
                // console.log("game solved")
@@ -144,6 +141,7 @@ export default function Home(props) {
             parsed.guesses = guesses
             localStorage.setItem("dalledle_state", JSON.stringify(parsed))
          }
+         props.setNumGuesses(guesses.length)
       }
    }, [guesses])
 
@@ -363,41 +361,16 @@ export default function Home(props) {
       console.log("puzzle solved")
       setDisplay(props.text_description)
       setSolved(true)
+      props.setImgUrl(props.url)
+      console.log("guesses.length is ", guesses.length)
+      props.setNumGuesses(guesses.length + "")
+      props.setDateStamp(props.dateStamp)
       document.getElementById("guess").disabled = true
       document.getElementById("vg").disabled = true
-      setStatsVisible(false)
-      setDirectionsVisible(false)
-      setFAQVisible(false)
-      setOverlayVisible(true)
-      setWinVisible(true)
-   }
 
-   function handleStatsClick() {
-      setDirectionsVisible(false)
-      setWinVisible(false)
-      setFAQVisible(false)
-      setOverlayVisible(true)
-      setStatsVisible(true)
-   }
-
-   function handleDirectionsClick() {
-      setOverlayVisible(true)
-      setWinVisible(false)
-      setDirectionsVisible(true)
-      setStatsVisible(false)
-      setFAQVisible(false)
-   }
-
-   function handleFAQClick() {
-      setWinVisible(false)
-      setStatsVisible(false)
-      setDirectionsVisible(false)
-      setFAQVisible(true)
-      setOverlayVisible(true)
-   }
-
-   function handleCloseDirections() {
-      document.getElementById("guess").focus()
+      props.setDirectionsVisible(false)
+      props.setWinVisible(true)
+      props.setOverlayVisible(true)
    }
 
    // prereq: guess should be string
@@ -574,51 +547,6 @@ export default function Home(props) {
 
    return (
       <>
-         {overlayVisible && (
-            <div
-               className={styles.overlayContainer}
-               onClick={() => {
-                  if (!winVisible && !faqVisible) {
-                     setOverlayVisible(false)
-                  }
-               }}
-            >
-               {winVisible && (
-                  <WinOverlay
-                     guessNum={guesses.length}
-                     imageUrl={props.url}
-                     date={props.dateStamp}
-                     dismiss={() => {
-                        setOverlayVisible(false)
-                        setWinVisible(false)
-                     }}
-                  />
-               )}
-               {statsVisible && (
-                  <StatsOverlay
-                     stats={JSON.parse(
-                        localStorage.getItem("dalledle_statistics")
-                     )}
-                  />
-               )}
-               {faqVisible && (
-                  <FAQOverlay
-                     dismiss={() => {
-                        setOverlayVisible(false)
-                        setFAQVisible(false)
-                     }}
-                  />
-               )}
-               {directionsVisible && (
-                  <DirectionsOverlay
-                     dismiss={() => {
-                        setOverlayVisible(false)
-                        handleCloseDirections()
-                     }}
-                  />
-               )}
-            </div>
-         )}
          <div className={styles.container}>
             <Head>
                <title>DALL-Edle</title>
@@ -628,12 +556,6 @@ export default function Home(props) {
                />
                <link rel="icon" href="/favicon.ico" />
             </Head>
-
-            <Header
-               handleStatsClick={handleStatsClick}
-               handleDirectionsClick={handleDirectionsClick}
-               handleFAQClick={handleFAQClick}
-            />
 
             <main
                className={styles.main}

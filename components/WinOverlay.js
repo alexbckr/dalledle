@@ -25,6 +25,7 @@ export default function WinOverlay(props) {
             <p className={styles.watermark}>dalledle.com</p>
             <img src={props.imageUrl} className={styles.image}></img>
             <div
+               key={props.guessNum}
                className={styles.shareButton}
                onClick={() => {
                 navigator.clipboard.writeText("I solved the DALL-Edle " + getDate() + " puzzle in " + (props.guessNum) + (props.guessNum === 1 ? " guess." : " guesses.") + " http://dalledle.com")

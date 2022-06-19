@@ -34,11 +34,10 @@ export default function Archive(props) {
    return (
       <>
          <Head>
-               <title>DALL-Edle / Archive</title>
-               <meta name="description" content="Past DALL-Edle images." />
-               <link rel="icon" href="/favicon.ico" />
-            </Head>
-         <Header title={"Archive"}/>
+           <title>DALL-Edle / Archive</title>
+           <meta name="description" content="Past DALL-Edle images." />
+           <link rel="icon" href="/favicon.ico" />
+         </Head>
          <div className={styles.container}>
             <div className={styles.content}>
                {props.images.map((image) => {

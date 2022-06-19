@@ -1,5 +1,5 @@
 .container {
-  min-height: 100vh;
+  min-height: calc(100vh - 120px);
   min-width: 100vw;
 }
 
@@ -94,7 +94,7 @@
   display: table;
   max-width: 100%;
   max-width: 420px;
-  margin-bottom: 80px;
+  margin-bottom: 20px;
   margin-top: 20px;
 }
 

@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.bmc, .email, .twtr {
+    height: 30px;
+}
+
+.container > * {
+    padding-left: 20px;
+    padding-right: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-right: 10px;
+    opacity: 0.2;
+    line-height: 30px;
+    font-size: 24px;
+    filter: grayscale(1)
+}
+
+.container > *:hover {
+    filter: none;
+    opacity: 1;
+    transition: ease 0.3s
+}
+
+@media (max-width: 600px) {
+    .container > * {
+        font-size: 18px;
+    }
+
+    .bmc {
+        height: 20px;
+    }
+}
