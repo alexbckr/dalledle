@@ -18,12 +18,14 @@
     cursor: pointer;
     margin-left: 10px;
     margin-right: 10px;
-    opacity: 0.5;
+    opacity: 0.2;
     line-height: 30px;
     font-size: 24px;
+    filter: grayscale(1)
 }
 
 .container > *:hover {
+    filter: none;
     opacity: 1;
     transition: ease 0.3s
 }

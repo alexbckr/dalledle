@@ -110,8 +110,7 @@ export default function Home(props) {
          else {
             if (parsed_state.gameStatus === "IN_PROGRESS") {
                console.log("game in progress")
-               setOverlayVisible(false)
-               setDirectionsVisible(false)
+               // set overlay visible false, set directions visible false
                setGuesses(parsed_state.guesses)
             } else if (parsed_state.gameStatus === "SOLVED") {
                console.log("game solved")
