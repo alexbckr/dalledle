@@ -1,10 +1,5 @@
 import Head from "next/head"
 import styles from "../styles/Home.module.css"
-import Header from "../components/Header"
-import WinOverlay from "../components/WinOverlay"
-import StatsOverlay from "../components/StatsOverlay"
-import DirectionsOverlay from "../components/DirectionsOverlay"
-import FAQOverlay from "../components/FAQOverlay"
 import { prisma } from "../lib/prisma.js"
 import { useState, useEffect } from "react"
 import parse from "html-react-parser"
@@ -163,7 +158,12 @@ export default function Home(props) {
       const body = { date: props.dateStamp, unique: isUniqueUser }
 
       console.log("incrementing plays where datestamp is ", props.dateStamp)
-      console.log("incrementing " + (isUniqueUser ? "unique" : "return") + " plays where datestamp is ", props.dateStamp)
+      console.log(
+         "incrementing " +
+            (isUniqueUser ? "unique" : "return") +
+            " plays where datestamp is ",
+         props.dateStamp
+      )
 
       try {
          await fetch("/api/increment_plays", {
@@ -180,6 +180,12 @@ export default function Home(props) {
       const body = { date: props.dateStamp, unique: isUniqueUser }
 
       console.log("incrementing solves where datestamp is ", props.dateStamp)
+      console.log(
+         "incrementing " +
+            (isUniqueUser ? "unique" : "return") +
+            " solves where datestamp is ",
+         props.dateStamp
+      )
 
       try {
          await fetch("/api/increment_solves", {
