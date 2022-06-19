@@ -65,6 +65,7 @@ export default function Home(props) {
    const [statsVisible, setStatsVisible] = useState(false)
    const [directionsVisible, setDirectionsVisible] = useState(true)
    const [faqVisible, setFAQVisible] = useState(false)
+   const [isUniqueUser, setIsUniqueUser] = useState(false)
    const [loading, setLoading] = useState(false)
 
    // runs onload
@@ -81,6 +82,8 @@ export default function Home(props) {
          if (prod) {
             incrementUniqueVisits()
          }
+         // this will set us up for incrementing plays, if the user decides to play
+         setIsUniqueUser(true)
          initiateLocalStorage()
       } else {
          // local storage found (the user is returning)
@@ -146,17 +149,23 @@ export default function Home(props) {
 
    function getDate() {
       if (props.date === null || props.date == undefined) {
-        return "";
+         return ""
       }
       var date_array = props.date.split("-")
-      var isoDate = Number(date_array[1]) + "/" + Number(date_array[2]) + "/" + date_array[0]
+      var isoDate =
+         Number(date_array[1]) +
+         "/" +
+         Number(date_array[2]) +
+         "/" +
+         date_array[0]
       return isoDate
    }
 
    const incrementPlays = async () => {
-      const body = { date: props.dateStamp }
+      const body = { date: props.dateStamp, unique: isUniqueUser }
 
       console.log("incrementing plays where datestamp is ", props.dateStamp)
+      console.log("incrementing " + (isUniqueUser ? "unique" : "return") + " plays where datestamp is ", props.dateStamp)
 
       try {
          await fetch("/api/increment_plays", {
@@ -188,7 +197,10 @@ export default function Home(props) {
    const incrementUniqueVisits = async () => {
       const body = { date: props.dateStamp }
 
-      console.log("incrementing unique visits where datestamp is ", props.dateStamp)
+      console.log(
+         "incrementing unique visits where datestamp is ",
+         props.dateStamp
+      )
 
       try {
          await fetch("/api/increment_unique_visits", {
@@ -204,7 +216,10 @@ export default function Home(props) {
    const incrementReturnVisits = async () => {
       const body = { date: props.dateStamp }
 
-      console.log("incrementing return visits where datestamp is ", props.dateStamp)
+      console.log(
+         "incrementing return visits where datestamp is ",
+         props.dateStamp
+      )
 
       try {
          await fetch("/api/increment_return_visits", {
@@ -607,7 +622,10 @@ export default function Home(props) {
          <div className={styles.container}>
             <Head>
                <title>DALL-Edle</title>
-               <meta name="description" content="A Wordle-inspired caption guessing game with DALL-E images." />
+               <meta
+                  name="description"
+                  content="A Wordle-inspired caption guessing game with DALL-E images."
+               />
                <link rel="icon" href="/favicon.ico" />
             </Head>
 

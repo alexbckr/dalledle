@@ -22,16 +22,19 @@ model image {
   plays             Int @default(0)
   solves            Int @default(0)
   unique_visits     Int @default(0)
+  unique_plays      Int @default(0)
   return_visits     Int @default(0)
+  return_plays      Int @default(0)
   // this is probably not the best implementation, but it works (for archive)
   past              Boolean @default(false)
 }
 
 model stat_book {
   id               String @id @default(cuid())
-  unique_users     Int @default(0)
   total_plays      Int @default(0)
   total_solves     Int @default(0)
   total_unique_visits     Int @default(0)
   total_return_visits     Int @default(0)
+  total_unique_plays      Int @default(0)
+  total_return_plays      Int @default(0)
 }
