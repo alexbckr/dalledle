@@ -77,10 +77,16 @@ export default function Home(props) {
       var resetStatsOnRefresh = false
       const dalledle_state = localStorage.getItem("dalledle_state")
       if (!dalledle_state || resetStatsOnRefresh) {
-         // no local storage found
+         // no local storage found (the user is new)
+         if (prod) {
+            incrementUniqueVisits()
+         }
          initiateLocalStorage()
       } else {
-         console.log("local storage found")
+         // local storage found (the user is returning)
+         if (prod) {
+            incrementReturnVisits()
+         }
          var parsed_state = JSON.parse(dalledle_state)
          console.log("game status: ", parsed_state.gameStatus)
 
@@ -102,9 +108,9 @@ export default function Home(props) {
                timeInMilisec / (1000 * 60 * 60 * 24)
             )
 
-            console.log("last solved: ", dateLastSolved)
-            console.log("today: ", dateToday)
-            console.log("days between dates: ", daysBetweenDates)
+            // console.log("last solved: ", dateLastSolved)
+            // console.log("today: ", dateToday)
+            // console.log("days between dates: ", daysBetweenDates)
 
             if (daysBetweenDates > 1) {
                console.log("reset streak")
@@ -114,12 +120,12 @@ export default function Home(props) {
          // otherwise, we're at the same date as last play (the date has not changed)
          else {
             if (parsed_state.gameStatus === "IN_PROGRESS") {
-               console.log("game in progress")
+               // console.log("game in progress")
                setOverlayVisible(false)
                setDirectionsVisible(false)
                setGuesses(parsed_state.guesses)
             } else if (parsed_state.gameStatus === "SOLVED") {
-               console.log("game solved")
+               // console.log("game solved")
                setGuesses(parsed_state.guesses)
                handleSolve()
             }
@@ -179,10 +185,29 @@ export default function Home(props) {
       }
    }
 
-   const incrementUniqueUsers = async () => {
-      const body = {}
+   const incrementUniqueVisits = async () => {
+      const body = { date: props.dateStamp }
+
+      console.log("incrementing unique visits where datestamp is ", props.dateStamp)
+
       try {
-         await fetch("/api/increment_unique_users", {
+         await fetch("/api/increment_unique_visits", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+         })
+      } catch (error) {
+         console.error(error)
+      }
+   }
+
+   const incrementReturnVisits = async () => {
+      const body = { date: props.dateStamp }
+
+      console.log("incrementing return visits where datestamp is ", props.dateStamp)
+
+      try {
+         await fetch("/api/increment_return_visits", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),
@@ -207,7 +232,6 @@ export default function Home(props) {
 
    function initiateLocalStorage() {
       newPuzzleResetState("", "")
-      incrementUniqueUsers()
       var initialStatisticsState = {
          currentStreak: "",
          gamesPlayed: "",
@@ -583,7 +607,7 @@ export default function Home(props) {
          <div className={styles.container}>
             <Head>
                <title>DALL-Edle</title>
-               <meta name="description" content="Inspired by DALL-E" />
+               <meta name="description" content="A Wordle-inspired caption guessing game with DALL-E images." />
                <link rel="icon" href="/favicon.ico" />
             </Head>
 

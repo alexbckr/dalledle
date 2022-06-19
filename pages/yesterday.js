@@ -34,6 +34,11 @@ export const getServerSideProps = async () => {
 export default function Archive(props) {
    return (
       <>
+         <Head>
+               <title>DALL-Edle / Yesterday's</title>
+               <meta name="description" content="Yesterday's DALL-Edle solution." />
+               <link rel="icon" href="/favicon.ico" />
+            </Head>
          <Header title={"Yesterday's"}/>
          <div className={styles.container}>
             <div className={styles.content}>
