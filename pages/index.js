@@ -24,17 +24,17 @@ export const getServerSideProps = async () => {
       image.updatedAt = image.updatedAt.toISOString()
    }
 
-   // var initialState = ""
+   var initialState = ""
 
-   // for (var i = 0; i < image.text_description.length; i++) {
-   //    if (image.text_description.charAt(i) !== " ") {
-   //       initialState += "_"
-   //    } else {
-   //       initialState += " "
-   //    }
-   // }
+   for (var i = 0; i < image.text_description.length; i++) {
+      if (image.text_description.charAt(i) !== " ") {
+         initialState += "_"
+      } else {
+         initialState += " "
+      }
+   }
 
-   // image.initialState = initialState
+   image.initialState = initialState
 
    // yes, you can find the solution by opening the image in a new tab. but where's the fun in that?
    var image_url =
@@ -43,7 +43,7 @@ export const getServerSideProps = async () => {
       ".jpg"
    image.url = image_url
    const sd = image.text_description.toUpperCase().split(" ")
-   image.initialState = "(" + sd.length + " words)"
+   // image.initialState = "(" + sd.length + " words)"
    image.split_description = sd
    image.dateStamp = isoDate
 
