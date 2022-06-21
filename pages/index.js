@@ -4,6 +4,7 @@ import { prisma } from "../lib/prisma.js"
 import { useState, useEffect } from "react"
 import parse from "html-react-parser"
 import * as gtag from "../lib/gtag"
+import Counter from "../components/Counter"
 
 const prod = process.env.NODE_ENV === "production"
 
@@ -57,6 +58,7 @@ export default function Home(props) {
    const [display, setDisplay] = useState(props.initialState)
    const [guesses, setGuesses] = useState([])
    const [isUniqueUser, setIsUniqueUser] = useState(false)
+   const [countdown, setCountdown] = useState(0)
    const [loading, setLoading] = useState(false)
 
    // runs onload
@@ -581,6 +583,7 @@ export default function Home(props) {
                   >
                      {display}
                   </div>
+                  <Counter />
                   <div className={styles.inputSection}>
                      <input
                         placeholder={
