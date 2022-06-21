@@ -23,7 +23,7 @@
 }
 
 .inputSection {
-  margin-top: 30px;
+  margin-top: 20px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -111,6 +111,16 @@
 
 .wordCorrect {
   color: orange;
+}
+
+.counter {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+
+  margin-top: 8px;
+  font-size: 12px;
+
 }
 
 @media (max-width: 460px) {

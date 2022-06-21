@@ -2,28 +2,22 @@ import styles from "../styles/Home.module.css"
 import { useEffect, useState } from "react"
 
 export default function Counter(props) {
-   const [countdown, setCountdown] = useState(-1)
+   const [countdownText, setCountdownText] = useState("")
 
    useEffect(() => {
-      console.log("useeffect run")
-      var now = new Date()
-      var then = new Date(
-         now.getFullYear(),
-         now.getMonth(),
-         now.getDate(),
-         0,
-         0,
-         0
-      )
-      var j = now.getTime() - then.getTime()
-      console.log("difference is " + j)
+      // Set the date we're counting down to
+      var countDownDate = props.nextImage.getTime()
+      var x = setInterval(function () {
+         // Get today's date and time
+         var now = new Date().getTime()
 
-      var myfunc = setInterval(function () {
-         j = j - 1000
-         setCountdown(j)
+         var distance = countDownDate - now
 
-         if (j <= 0) {
-            clearInterval(myfunc)
+         setCountdownText(formatMS(distance))
+
+         if (distance < 0) {
+            clearInterval(x)
+            setCountdownText("Refresh for the new DALLE-dle!")
          }
       }, 1000)
    }, [])
@@ -40,8 +34,6 @@ export default function Counter(props) {
    }
 
    return (
-      <div className={styles.counter}>
-         <div>Next DALL-Edle in: {formatMS(countdown)}</div>
-      </div>
+        <div className={styles.counter}>Next DALL-Edle in {countdownText === "" ? "__h __m __s" : countdownText}</div>
    )
 }

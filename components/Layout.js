@@ -61,6 +61,7 @@ export default function Layout({ children }) {
          setNumGuesses: setNumGuesses,
          setImgUrl: setImgUrl,
          setDateStamp: setDateStamp,
+         overlayVisible: overlayVisible,
       })
    )
 
