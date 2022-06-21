@@ -4,6 +4,7 @@ import { prisma } from "../lib/prisma.js"
 import { useState, useEffect } from "react"
 import parse from "html-react-parser"
 import * as gtag from "../lib/gtag"
+import Counter from "../components/Counter"
 
 const prod = process.env.NODE_ENV === "production"
 
@@ -57,7 +58,9 @@ export default function Home(props) {
    const [display, setDisplay] = useState(props.initialState)
    const [guesses, setGuesses] = useState([])
    const [isUniqueUser, setIsUniqueUser] = useState(false)
-   const [loading, setLoading] = useState(false)
+   const [loading, setLoading] = useState(true)
+
+   var nextImage = new Date("2022-06-22")
 
    // runs onload
    useEffect(() => {
@@ -581,6 +584,7 @@ export default function Home(props) {
                   >
                      {display}
                   </div>
+                  {solved && !props.overlayVisible && <Counter nextImage={nextImage}/>}
                   <div className={styles.inputSection}>
                      <input
                         placeholder={
