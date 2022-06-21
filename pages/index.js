@@ -97,7 +97,7 @@ export default function Home(props) {
                parsed_state.lastCompletedTs,
                parsed_state.lastPlayedTs
             )
-            // reset streak?
+            // check to reset streak
             let dateLastSolved = new Date(parsed_state.lastCompletedTs)
             let dateToday = new Date(props.dateStamp)
             let timeInMilisec = dateToday - dateLastSolved
