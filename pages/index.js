@@ -584,7 +584,7 @@ export default function Home(props) {
                   >
                      {display}
                   </div>
-                  {solved && !props.overlayVisible && <Counter nextImage={nextImage}/>}
+                  {/* {solved && !props.overlayVisible && <Counter nextImage={nextImage}/>} */}
                   <div className={styles.inputSection}>
                      <input
                         placeholder={
