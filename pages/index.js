@@ -12,20 +12,20 @@ const prod = process.env.NODE_ENV === "production"
 export const getServerSideProps = async () => {
    //a variable that holds a random number between 1 and 81 generated with the date as a seed
 
-   const randomNumber = Math.floor(Math.random() * 81) + 1
+   const randomNumber = Math.floor(Math.random() * 76) + 1
    var date = new Date()
    date.setFullYear(2022)
 
-   if (randomNumber < 11) {
+   if (randomNumber < 19) {
       date.setMonth(5)
-      date.setDate(randomNumber)
-   } else if (randomNumber < 42) {
+      date.setDate(randomNumber + 12)
+   } else if (randomNumber < 50) {
       date.setMonth(6)
-      date.setDate(randomNumber - 11)
+      date.setDate(randomNumber - 19)
    } else {
       date.setMonth(7)
-      date.setDate(randomNumber - 42)
-   }
+      date.setDate(randomNumber - 50)
+   } 
    var isoDate = date.toISOString().split("T")[0]
    console.log("isoDate", isoDate)
 
