@@ -16,8 +16,29 @@
   border: 2px solid #D3D6DA;
 }
 
+.disclaimer {
+  font-size: 0.8rem;
+  background-color: green;
+  color: white;
+  text-align: left;
+  max-width: 420px;
+  justify-content: center;
+  margin-bottom: 8px;
+  padding: 8px 8px;
+  font-weight: 800;
+}
+
+.contact {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.contact:hover {
+  text-decoration: none;
+}
+
 .game {
-  margin-top: 40px;
+  margin-top: 24px;
   display: flex;
   flex-direction: column;
 }

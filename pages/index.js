@@ -5,12 +5,29 @@ import { useState, useEffect } from "react"
 import parse from "html-react-parser"
 import * as gtag from "../lib/gtag"
 import Counter from "../components/Counter"
+import Router from "next/router"
 
 const prod = process.env.NODE_ENV === "production"
 
 export const getServerSideProps = async () => {
-   var isoDate = new Date().toISOString().split("T")[0]
-   // var isoDate = "2022-06-17"
+   //a variable that holds a random number between 1 and 81 generated with the date as a seed
+
+   const randomNumber = Math.floor(Math.random() * 81) + 1
+   var date = new Date()
+   date.setFullYear(2022)
+
+   if (randomNumber < 11) {
+      date.setMonth(5)
+      date.setDate(randomNumber)
+   } else if (randomNumber < 42) {
+      date.setMonth(6)
+      date.setDate(randomNumber - 11)
+   } else {
+      date.setMonth(7)
+      date.setDate(randomNumber - 42)
+   }
+   var isoDate = date.toISOString().split("T")[0]
+   console.log("isoDate", isoDate)
 
    const image = await prisma.image.findUnique({
       where: {
@@ -44,6 +61,7 @@ export const getServerSideProps = async () => {
       ".jpg"
    image.url = image_url
    const sd = image.text_description.toUpperCase().split(" ")
+   console.log("image text: " + image.text_description)
    // image.initialState = "(" + sd.length + " words)"
    image.split_description = sd
    image.dateStamp = isoDate
@@ -574,6 +592,35 @@ export default function Home(props) {
                }
             >
                <div className={styles.game}>
+                  <div className={styles.disclaimer}>
+                     DALL-Edle has been retired. You can replay old DALL-Edles
+                     below, or view past DALL-Edles{" "}
+                     <span
+                        className={styles.contact}
+                        onClick={() => Router.push("/archive")}
+                     >
+                        here
+                     </span>
+                     . Thank you for a great three months.{" "}
+                     <span
+                        className={styles.contact}
+                        onClick={() => {
+                           navigator.clipboard
+                              .writeText("alexbecker@virginia.edu")
+                              .then(() => {
+                                 alert(
+                                    "Email (alexbecker@virginia.edu) copied to clipboard!"
+                                 )
+                              })
+                              .catch(() => {
+                                 alert("Couldn't copy. Not sure why :(")
+                              })
+                        }}
+                     >
+                        Contact me
+                     </span>
+                     .
+                  </div>
                   <img
                      draggable="false"
                      className={styles.mainImage}
