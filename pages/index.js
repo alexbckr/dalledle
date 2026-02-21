@@ -1,6 +1,6 @@
 import Head from "next/head"
 import styles from "../styles/Home.module.css"
-import { prisma } from "../lib/prisma.js"
+import { getImageByDate, getImageForToday } from "../lib/archiveData.js"
 import { useState, useEffect } from "react"
 import parse from "html-react-parser"
 import * as gtag from "../lib/gtag"
@@ -10,37 +10,16 @@ import Router from "next/router"
 const prod = process.env.NODE_ENV === "production"
 
 export const getServerSideProps = async () => {
-   //a variable that holds a random number between 1 and 81 generated with the date as a seed
+   let image = await getImageForToday()
 
-   const randomNumber = Math.floor(Math.random() * 76) + 1
-   var date = new Date()
-   date.setFullYear(2022)
-
-   if (randomNumber < 19) {
-      date.setMonth(5)
-      date.setDate(randomNumber + 12)
-   } else if (randomNumber < 50) {
-      date.setMonth(6)
-      date.setDate(randomNumber - 19)
-   } else {
-      date.setMonth(7)
-      date.setDate(randomNumber - 50)
-   } 
-   var isoDate = date.toISOString().split("T")[0]
-   console.log("isoDate", isoDate)
-
-   const image = await prisma.image.findUnique({
-      where: {
-         date: isoDate,
-      },
-   })
-
-   if (image.createdAt !== null) {
-      image.createdAt = image.createdAt.toString()
+   if (!image) {
+      return {
+         notFound: true,
+      }
    }
-   if (image.updatedAt !== null) {
-      image.updatedAt = image.updatedAt.toISOString()
-   }
+
+   const isoDate = image.date
+   image = (await getImageByDate(isoDate)) || image
 
    var initialState = ""
 
@@ -55,11 +34,13 @@ export const getServerSideProps = async () => {
    image.initialState = initialState
 
    // yes, you can find the solution by opening the image in a new tab. but where's the fun in that?
-   var image_url =
-      "https://dalledle-images.s3.us-east-2.amazonaws.com/" +
-      image.text_description.toLowerCase().replace(/ /g, "_") +
-      ".jpg"
-   image.url = image_url
+   if (!image.url) {
+      var image_url =
+         "https://dalledle-images.s3.us-east-2.amazonaws.com/" +
+         image.text_description.toLowerCase().replace(/ /g, "_") +
+         ".jpg"
+      image.url = image_url
+   }
    const sd = image.text_description.toUpperCase().split(" ")
    console.log("image text: " + image.text_description)
    // image.initialState = "(" + sd.length + " words)"
@@ -350,7 +331,6 @@ export default function Home(props) {
                (Number(parsed_statistics.gamesWon) /
                   Number(parsed_statistics.gamesPlayed)) *
                100
-            //prisma
             if (prod) {
                incrementSolves()
             }
@@ -606,10 +586,10 @@ export default function Home(props) {
                         className={styles.contact}
                         onClick={() => {
                            navigator.clipboard
-                              .writeText("alexbecker@virginia.edu")
+                              .writeText("me@amb.horse")
                               .then(() => {
                                  alert(
-                                    "Email (alexbecker@virginia.edu) copied to clipboard!"
+                                    "Email (me@amb.horse) copied to clipboard!"
                                  )
                               })
                               .catch(() => {

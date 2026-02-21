@@ -7,9 +7,9 @@ export default function Footer(props) {
    return (
       <div className={styles.container}>
          {/* <img onClick={() => {
-                navigator.clipboard.writeText("alexbecker@virginia.edu")
+                navigator.clipboard.writeText("me@amb.horse")
                 .then(() => {
-                  alert("Email (alexbecker@virginia.edu) copied to clipboard!");
+                  alert("Email (me@amb.horse) copied to clipboard!");
                 })
                 .catch(() => {
                   alert("Couldn't copy. Not sure why :(");
@@ -19,9 +19,9 @@ export default function Footer(props) {
          <img onClick={() => {window.open("https://www.buymeacoffee.com/alexbecker", "_blank")} } className={styles.bmc} src="/bmc-full-logo-no-background.png"></img> */}
 
          <div onClick={() => {
-                navigator.clipboard.writeText("alexbecker@virginia.edu")
+                navigator.clipboard.writeText("me@amb.horse")
                 .then(() => {
-                  alert("Email (alexbecker@virginia.edu) copied to clipboard!");
+                  alert("Email (me@amb.horse) copied to clipboard!");
                 })
                 .catch(() => {
                   alert("Couldn't copy. Not sure why :(");

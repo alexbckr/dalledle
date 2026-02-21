@@ -121,13 +121,7 @@ export default function Layout({ children }) {
                   router.pathname === "/" ? handleDirectionsClick : null
                }
                handleFAQClick={router.pathname === "/" ? handleFAQClick : null}
-               title={
-                  router.pathname === "/"
-                     ? "DALL-Edle"
-                     : router.pathname === "/yesterday"
-                     ? "Yesterday's"
-                     : "Archive"
-               }
+               title={router.pathname === "/" ? "DALL-Edle" : "Archive"}
             />
             <main>{childrenWithProps}</main>
             <Footer />
