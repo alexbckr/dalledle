@@ -47,11 +47,11 @@ export default function DirectionsOverlay(props) {
                </video>
             </div> */}
             <p>
-               tip: treat each image in a grid individually (not a sequence)
+               Tip: treat each image in the grid as an individual example of the phrase (i.e. they are not in a sequence)
             </p>
 
             <div className={styles.playButton} onClick={() => props.dismiss()}>
-               Let's play
+               Let's Play!
             </div>
          </div>
       </div>
